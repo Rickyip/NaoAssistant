@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.aldebaran.qi.CallError;
@@ -30,8 +31,7 @@ import com.yipkaming.naoassistant.model.VerbalReminder;
 
 public class AssistantActivity extends AppCompatActivity {
 
-    private static final String TAG = Config.TAG;
-    private static final String TAG_PRE = Config.getSimpleName(AssistantActivity.class);
+    private static final String TAG = Config.getSimpleName(AssistantActivity.class);
 
     private static final int EVENT_SHOW_CREATE_NOS = 0;
     private static final int EVENT_LIST_CURRENT_NOS = 1;
@@ -39,78 +39,49 @@ public class AssistantActivity extends AppCompatActivity {
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     private boolean isEnabled = false;
-    private TextView mTextView;
+
+
+    TextView messages;
+    Button showList, create;
 
     NotificationManager manager;
     ALTextToSpeech alTextToSpeech;
 
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case EVENT_SHOW_CREATE_NOS:
-                    showCreateNotification();
-                    break;
-                case EVENT_LIST_CURRENT_NOS:
-                    listCurrentNotification();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assistant);
-        mTextView = (TextView) findViewById(R.id.textView);
+        messages = (TextView) findViewById(R.id.messages);
+
+        showList = (Button) findViewById(R.id.showList);
+        create = (Button) findViewById(R.id.create);
 
         manager= (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+
+        setupBtnListener();
     }
+
+    private void setupBtnListener() {
+        showList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listCurrentNotification();
+            }
+        });
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         isEnabled = isEnabled();
-        logE("isEnabled = " + isEnabled);
+        Log.e(TAG, "isEnabled = " + isEnabled );
         if (!isEnabled) {
             showConfirmDialog();
         }
     }
 
-    public void buttonOnClicked(View view) {
-        mTextView.setTextColor(Color.BLACK);
-        switch (view.getId()) {
-            case R.id.btnCreateNotify:
-                logE("Create notifications...");
-                createNotification(this);
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_SHOW_CREATE_NOS), 50);
-                break;
-            case R.id.btnClearLastNotify:
-                logE("Clear Last notification...");
-                clearLastNotification();
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_LIST_CURRENT_NOS), 50);
-                break;
-            case R.id.btnClearAllNotify:
-                logE("Clear All notifications...");
-                clearAllNotifications();
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_LIST_CURRENT_NOS), 50);
-                break;
-            case R.id.btnListNotify:
-                logE("List notifications...");
-                listCurrentNotification();
-                break;
-            case R.id.btnEnableUnEnableNotify:
-                logE("Enable/UnEnable notification...");
-                openNotificationAccess();
-                break;
-            default:
-                break;
-        }
-    }
 
     private boolean isEnabled() {
         String pkgName = getPackageName();
@@ -137,17 +108,6 @@ public class AssistantActivity extends AppCompatActivity {
 //        ncBuilder.setSmallIcon(R.drawable.ic_settings_black);
         ncBuilder.setAutoCancel(true);
         manager.notify((int) System.currentTimeMillis(),ncBuilder.build());
-    }
-
-    private void cancelNotification(Context context, boolean isCancelAll) {
-        Intent intent = new Intent();
-        intent.setAction(NotificationMonitor.ACTION_NLS_CONTROL);
-        if (isCancelAll) {
-            intent.putExtra("command", "cancel_all");
-        }else {
-            intent.putExtra("command", "cancel_last");
-        }
-        context.sendBroadcast(intent);
     }
 
     private String getCurrentNotificationString() {
@@ -187,10 +147,7 @@ public class AssistantActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-//                    if(robot.isConnected()){
-//                        new SpeechTask(robot.getSpeech()).execute(verbalReminders.getReminder());
-//
-//                    }
+
                 }
             }
         }
@@ -200,8 +157,9 @@ public class AssistantActivity extends AppCompatActivity {
     private void listCurrentNotification() {
         String result = "";
         if (isEnabled) {
+
 //            if (NotificationMonitor.getCurrentNotifications() == null) {
-//                logE("mCurrentNotifications.get(0) is null");
+//                  Log.e(TAG, "listCurrentNotification: mCurrentNotifications.get(0) is null");
 //                return;
 //            }
             int n = NotificationMonitor.mCurrentNotificationsCounts;
@@ -211,39 +169,22 @@ public class AssistantActivity extends AppCompatActivity {
                 result = String.format(getResources().getQuantityString(R.plurals.active_notification_count_nonzero, n, n));
             }
             result = result + "\n" + getCurrentNotificationString();
-            mTextView.setText(result);
+            messages.setText(result);
         }else {
-            mTextView.setTextColor(Color.RED);
-            mTextView.setText("Please Enable Notification Access");
+            messages.setTextColor(Color.RED);
+            messages.setText("Please Enable Notification Access");
         }
     }
 
-    private void clearLastNotification() {
-        if (isEnabled) {
-            cancelNotification(this,false);
-        }else {
-            mTextView.setTextColor(Color.RED);
-            mTextView.setText("Please Enable Notification Access");
-        }
-    }
-
-    private void clearAllNotifications() {
-        if (isEnabled) {
-            cancelNotification(this,true);
-        }else {
-            mTextView.setTextColor(Color.RED);
-            mTextView.setText("Please Enable Notification Access");
-        }
-    }
 
     private void showCreateNotification() {
         if (NotificationMonitor.mPostedNotification != null) {
             String result = NotificationMonitor.mPostedNotification.getPackageName()+"\n"
                     + NotificationMonitor.mPostedNotification.getTag()+"\n"
                     + NotificationMonitor.mPostedNotification.getId()+"\n"+"\n"
-                    + mTextView.getText();
+                    + messages.getText();
             result = "Create notification:"+"\n"+result;
-            mTextView.setText(result);
+            messages.setText(result);
         }
     }
 
@@ -272,7 +213,6 @@ public class AssistantActivity extends AppCompatActivity {
                 .create().show();
     }
 
-    private void logE(Object object) {
-        Log.e(TAG, TAG_PRE+object);
-    }
+
+
 }
