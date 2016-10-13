@@ -8,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
@@ -32,12 +30,6 @@ import com.yipkaming.naoassistant.model.VerbalReminder;
 public class AssistantActivity extends AppCompatActivity {
 
     private static final String TAG = Config.getSimpleName(AssistantActivity.class);
-
-    private static final int EVENT_SHOW_CREATE_NOS = 0;
-    private static final int EVENT_LIST_CURRENT_NOS = 1;
-
-    private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
-    private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     private boolean isEnabled = false;
 
 
@@ -52,11 +44,10 @@ public class AssistantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assistant);
-        messages = (TextView) findViewById(R.id.messages);
 
+        messages = (TextView) findViewById(R.id.messages);
         showList = (Button) findViewById(R.id.showList);
         create = (Button) findViewById(R.id.create);
-
         manager= (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
         setupBtnListener();
@@ -85,7 +76,7 @@ public class AssistantActivity extends AppCompatActivity {
 
     private boolean isEnabled() {
         String pkgName = getPackageName();
-        final String flat = Settings.Secure.getString(getContentResolver(), ENABLED_NOTIFICATION_LISTENERS);
+        final String flat = Settings.Secure.getString(getContentResolver(), Config.ENABLED_NOTIFICATION_LISTENERS);
         if (!TextUtils.isEmpty(flat)) {
             final String[] names = flat.split(":");
             for (int i = 0; i < names.length; i++) {
@@ -100,22 +91,12 @@ public class AssistantActivity extends AppCompatActivity {
         return false;
     }
 
-    private void createNotification(Context context) {
-        NotificationCompat.Builder ncBuilder = new NotificationCompat.Builder(context);
-        ncBuilder.setContentTitle("My Notification");
-        ncBuilder.setContentText("Notification Listener Service Example");
-        ncBuilder.setTicker("Notification Listener Service Example");
-//        ncBuilder.setSmallIcon(R.drawable.ic_settings_black);
-        ncBuilder.setAutoCancel(true);
-        manager.notify((int) System.currentTimeMillis(),ncBuilder.build());
-    }
 
     private String getCurrentNotificationString() {
         String listNos = "";
         StatusBarNotification[] currentNos = NotificationMonitor.getCurrentNotifications();
         if (currentNos != null) {
             VerbalReminder verbalReminders = null;
-//            VerbalReminder[] verbalReminders = new VerbalReminder[currentNos.length];
             for (int i = 0; i < currentNos.length; i++) {
                 StatusBarNotification currentNo = currentNos[i];
                 Bundle extra = currentNo.getNotification().extras;
@@ -157,11 +138,6 @@ public class AssistantActivity extends AppCompatActivity {
     private void listCurrentNotification() {
         String result = "";
         if (isEnabled) {
-
-//            if (NotificationMonitor.getCurrentNotifications() == null) {
-//                  Log.e(TAG, "listCurrentNotification: mCurrentNotifications.get(0) is null");
-//                return;
-//            }
             int n = NotificationMonitor.mCurrentNotificationsCounts;
             if (n == 0) {
                 result = getResources().getString(R.string.active_notification_count_zero);
@@ -175,21 +151,9 @@ public class AssistantActivity extends AppCompatActivity {
             messages.setText("Please Enable Notification Access");
         }
     }
-
-
-    private void showCreateNotification() {
-        if (NotificationMonitor.mPostedNotification != null) {
-            String result = NotificationMonitor.mPostedNotification.getPackageName()+"\n"
-                    + NotificationMonitor.mPostedNotification.getTag()+"\n"
-                    + NotificationMonitor.mPostedNotification.getId()+"\n"+"\n"
-                    + messages.getText();
-            result = "Create notification:"+"\n"+result;
-            messages.setText(result);
-        }
-    }
-
+    
     private void openNotificationAccess() {
-        startActivity(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
+        startActivity(new Intent(Config.ACTION_NOTIFICATION_LISTENER_SETTINGS));
     }
 
     private void showConfirmDialog() {

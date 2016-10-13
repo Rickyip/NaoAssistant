@@ -14,4 +14,8 @@ public class Config {
     }
 
 
+    public static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
+    public static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
+
+
 }
