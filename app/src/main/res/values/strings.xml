@@ -45,4 +45,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="robot_ip">IP Address</string>
     <string name="connect">Connect</string>
+    <string name="listOfNotification">List of Notification</string>
 </resources>

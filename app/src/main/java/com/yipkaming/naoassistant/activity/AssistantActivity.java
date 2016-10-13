@@ -151,7 +151,7 @@ public class AssistantActivity extends AppCompatActivity {
             messages.setText("Please Enable Notification Access");
         }
     }
-    
+
     private void openNotificationAccess() {
         startActivity(new Intent(Config.ACTION_NOTIFICATION_LISTENER_SETTINGS));
     }
