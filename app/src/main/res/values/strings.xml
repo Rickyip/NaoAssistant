@@ -1,0 +1,48 @@
+<resources>
+
+    <string name="action_settings">Settings</string>
+    <string name="close_hand">Close hands</string>
+    <string name="connected">Connected.</string>
+    <string name="connection_lost">Connection lost.</string>
+    <string name="connecting_message">Please wait. Trying to connect.</string>
+
+    <string name="disconnect">Disconnect</string>
+    <string name="default_ip">192.168.43.68</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="not_connected">Could not connect.</string>
+
+    <string name="open_hand">Open hands</string>
+
+
+    <string name="rest">Rest</string>
+
+    <string name="sit">Sit</string>
+    <string name="stand">Stand</string>
+    <string name="say">Say</string>
+
+    <string name="wake">Wake up</string>
+    <string name="wait_message">Executing your order.</string>
+
+
+    <string name="active_notification_count_zero">No active notification</string>
+    <string name="Log">Log</string>
+    <string name="Connection">Connection</string>
+    <string name="Notification">Notification</string>
+    <string name="Connection_Setting">Connection Setting</string>
+    <string name="Notification_Setting">Notification Setting</string>
+    <string name="Not_Connected">Not Connected</string>
+    <string name="Start">Start</string>
+    <plurals name="active_notification_count_nonzero">
+        <item quantity="one">%d active notification</item>
+        <item quantity="other">%d active notifications</item>
+    </plurals>
+
+    <string name="app_name">NaoAssistant</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="robot_ip">IP Address</string>
+    <string name="connect">Connect</string>
+</resources>
