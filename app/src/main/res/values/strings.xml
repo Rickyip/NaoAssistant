@@ -46,4 +46,5 @@
     <string name="robot_ip">IP Address</string>
     <string name="connect">Connect</string>
     <string name="listOfNotification">List of Notification</string>
+    <string name="Assist">Assist</string>
 </resources>

@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionFragmen
     private void initFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.connectFragment, new ConnectionFragment())
+                .add(R.id.connectFragment, ConnectionFragment.getInstance())
                 .commit();
     }
 

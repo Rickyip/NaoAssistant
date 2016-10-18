@@ -3,14 +3,12 @@ package com.yipkaming.naoassistant.activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +18,8 @@ import android.widget.TextView;
 
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
+import com.yipkaming.naoassistant.fragment.ConnectionFragment;
+import com.yipkaming.naoassistant.helper.KeyboardHelper;
 import com.yipkaming.naoassistant.helper.NotificationMonitor;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.model.Config;
@@ -27,14 +27,14 @@ import com.yipkaming.naoassistant.model.Naoqi;
 import com.yipkaming.naoassistant.model.VerbalReminder;
 
 
-public class AssistantActivity extends AppCompatActivity {
+public class AssistantActivity extends AppCompatActivity implements ConnectionFragment.OnConnectionListener{
 
     private static final String TAG = Config.getSimpleName(AssistantActivity.class);
     private boolean isEnabled = false;
 
 
     TextView messages;
-    Button showList, create;
+    Button showList;
 
     NotificationManager manager;
     ALTextToSpeech alTextToSpeech;
@@ -45,12 +45,21 @@ public class AssistantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assistant);
 
+        initFragment();
+
         messages = (TextView) findViewById(R.id.messages);
         showList = (Button) findViewById(R.id.showList);
-        create = (Button) findViewById(R.id.create);
         manager= (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
         setupBtnListener();
+    }
+
+
+    private void initFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.connectFragment, new ConnectionFragment())
+                .commit();
     }
 
     private void setupBtnListener() {
@@ -66,6 +75,7 @@ public class AssistantActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        KeyboardHelper.closeKeyboardFromActivity(this);
         isEnabled = isEnabled();
         Log.e(TAG, "isEnabled = " + isEnabled );
         if (!isEnabled) {
@@ -178,5 +188,13 @@ public class AssistantActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onConnected() {
+        // do nothing
+    }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

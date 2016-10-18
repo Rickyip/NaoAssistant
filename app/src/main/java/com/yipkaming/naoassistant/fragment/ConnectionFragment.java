@@ -19,22 +19,21 @@ import com.yipkaming.naoassistant.activity.AssistantActivity;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Naoqi;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class ConnectionFragment extends Fragment {
 
-
     private static final String TAG = Config.getSimpleName(ConnectionFragment.class);
+
+    private static ConnectionFragment instance;
+
+    private Naoqi naoqi;
+
+    private OnConnectionListener onConnectionListener;
 
     View view;
     EditText ip;
     Button connect;
-
-    private Naoqi naoqi;
     String ipAddr;
-
-    private OnConnectionListener onConnectionListener;
 
     public ConnectionFragment() {}
 
@@ -50,11 +49,12 @@ public class ConnectionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ip = (EditText) view.findViewById(R.id.ip);
         connect = (Button) view.findViewById(R.id.connect);
+        naoqi = Naoqi.getInstance();
         setupUIListener();
     }
 
     private void setupUIListener() {
-        if(naoqi != null && naoqi.isRunning()){
+        if(naoqi.isRunning()){
             setUIItems(naoqi.isRunning());
         }else {
             connect.setOnClickListener(new View.OnClickListener() {
@@ -68,24 +68,32 @@ public class ConnectionFragment extends Fragment {
 
     private void makeConnection() {
         ipAddr = ip.getText().toString();
-        naoqi = Naoqi.getInstance();
-        naoqi.init("tcp://"+ipAddr+":9559");
-        if(naoqi.isRunning()){
-            Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
-            setUIItems(naoqi.isRunning());
-            try {
-                ALTextToSpeech tts = new ALTextToSpeech(naoqi.getSession());
-                tts.say("Connected");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        boolean connected = naoqi.isRunning();
+        if(!connected){
+            naoqi.init("tcp://"+ipAddr+":9559");
+            connected = naoqi.isRunning();
+            if(connected){
+                Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
+                setUIItems(connected);
+                try {
+                    ALTextToSpeech tts = new ALTextToSpeech(naoqi.getSession());
+                    tts.say("Connected");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            Intent intent = new Intent(getContext(), AssistantActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(getContext(), AssistantActivity.class);
+                startActivity(intent);
+                instance = this;
 //            onConnectionListener.onConnected();
-        }else {
-            Log.e("connect: ", "*****************" );
+            }else {
+                Log.e("connect: ", "*****************" );
+            }
         }
+//        else {
+//            setUIItems(connected);
+//            Log.e(TAG, "makeConnection: " );
+//        }
     }
 
     private void setUIItems(boolean isConnected){
@@ -107,5 +115,13 @@ public class ConnectionFragment extends Fragment {
     public interface OnConnectionListener {
         // TODO: Update argument type and name
         void onConnected();
+    }
+
+
+    public static ConnectionFragment getInstance() {
+        if(instance == null){
+            instance = new ConnectionFragment();
+        }
+        return instance;
     }
 }

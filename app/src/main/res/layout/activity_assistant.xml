@@ -10,11 +10,19 @@ android:paddingTop="@dimen/activity_vertical_margin"
 tools:context="com.yipkaming.naoassistant.activity.AssistantActivity" >
 
 
-<Button
-    android:id="@+id/showList"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/listOfNotification" />
+    <FrameLayout
+        android:id="@+id/connectFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E3F2FD"
+        tools:context=".activity.AssistantActivity" />
+
+    <Button
+        android:id="@+id/showList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/connectFragment"
+        android:text="@string/Assist" />
 
     <ScrollView
         android:layout_width="match_parent"

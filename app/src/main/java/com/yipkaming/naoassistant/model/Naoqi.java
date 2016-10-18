@@ -9,7 +9,7 @@ import com.aldebaran.qi.Session;
 
 public class Naoqi {
 
-    private static Naoqi instance ;
+    private static Naoqi instance;
 
     private String _IP;
     private Application app;
