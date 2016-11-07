@@ -15,10 +15,10 @@ public class VerbalReminder {
     public VerbalReminder(String time, String content) {
         this.time = time;
         this.content = content;
-        reminder = timeHeader+timeToDate()+content;
     }
 
     public String getReminder() {
+        reminder = timeHeader+timeToDate()+content;
         return reminder;
     }
 
