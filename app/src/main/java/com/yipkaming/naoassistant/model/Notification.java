@@ -12,6 +12,7 @@ public class Notification {
     private String content;
     private String tag;
     private long time;
+    private int importantce = 0;
 
     public Notification(String title, String packageName, String content, String tag, long time, String tickerText) {
         this.title = title;
@@ -21,6 +22,8 @@ public class Notification {
         this.tag = tag;
         this.time = time;
     }
+
+    public void save(){}
 
     public String getTickerText() {
         return tickerText;
@@ -68,5 +71,13 @@ public class Notification {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public int getImportantce() {
+        return importantce;
+    }
+
+    public void setImportantce(int importantce) {
+        this.importantce = importantce;
     }
 }
