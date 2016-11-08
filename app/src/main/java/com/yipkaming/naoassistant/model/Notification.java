@@ -12,7 +12,7 @@ public class Notification {
     private String content;
     private String tag;
     private long time;
-    private int importantce = 0;
+    private int importance = 0;
 
     public Notification(String title, String packageName, String content, String tag, long time, String tickerText) {
         this.title = title;
@@ -73,11 +73,11 @@ public class Notification {
         this.tag = tag;
     }
 
-    public int getImportantce() {
-        return importantce;
+    public int getImportance() {
+        return importance;
     }
 
-    public void setImportantce(int importantce) {
-        this.importantce = importantce;
+    public void setImportance(int importance) {
+        this.importance = importance;
     }
 }
