@@ -12,9 +12,11 @@ import java.util.Date;
 public class DateFormat {
 
     private static final String TODAY = "Today ";
-//    private static final String TODAY = "Today";
+    private static final String YESTERDAY = "Yesterday ";
+    private static final String TOMORROW = "Tomorrow ";
 
-    private static long today = System.currentTimeMillis() % 1000;
+    private static long today = System.currentTimeMillis() ;
+//    private final static long oneDay =
 
     public static String getDateTime(String timestamp){
         String date = getDate(Long.parseLong(timestamp));
@@ -38,5 +40,31 @@ public class DateFormat {
         return getDate(System.currentTimeMillis());
     }
 
+    public static String getDaysHoursMinutes(long timestamp){
+        //in milliseconds
+        long diff = today - timestamp;
 
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000) % 24;
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+
+        String msg = "";
+        if(diffDays > 1 ){
+            msg = diffDays + " days ago";
+        } else if(diffDays == 1 ){
+            msg = YESTERDAY;
+        } else if (diffDays == 0){
+            if(diffHours > 0 ){
+                msg = diffHours + " hours ago";
+            }else {
+                if( diffMinutes > 0){
+                    msg = diffMinutes + " minutes ago";
+                }else {
+                    msg = "now";
+                }
+            }
+        }
+        return msg;
+    }
 }
