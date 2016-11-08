@@ -11,9 +11,9 @@ public class Notification {
     private String tickerText;
     private String content;
     private String tag;
-    private String time;
+    private long time;
 
-    public Notification(String title, String packageName, String content, String tag, String time, String tickerText) {
+    public Notification(String title, String packageName, String content, String tag, long time, String tickerText) {
         this.title = title;
         this.packageName = packageName;
         this.tickerText = tickerText;
@@ -54,11 +54,11 @@ public class Notification {
         this.content = content;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
