@@ -4,7 +4,7 @@ package com.yipkaming.naoassistant.model;
  * Created by Yip on 7/11/2016.
  */
 
-public class Notification {
+public class NotificationMessage {
     // this class can combine info from bundle.extra and notification
     private String title;
     private String packageName;
@@ -14,7 +14,7 @@ public class Notification {
     private long time;
     private int importance = 0;
 
-    public Notification(String title, String packageName, String content, String tag, long time, String tickerText) {
+    public NotificationMessage(String title, String packageName, String content, String tag, long time, String tickerText) {
         this.title = title;
         this.packageName = packageName;
         this.tickerText = tickerText;

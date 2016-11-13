@@ -18,10 +18,10 @@ public class VerbalReminder {
         this.content = content;
     }
 
-    public VerbalReminder(Notification notification) {
-        this.time = String.valueOf(notification.getTime());
-        this.content = notification.getContent();
-        this.app += notification.getPackageName();
+    public VerbalReminder(NotificationMessage notificationMessage) {
+        this.time = String.valueOf(notificationMessage.getTime());
+        this.content = notificationMessage.getContent();
+        this.app += notificationMessage.getPackageName();
     }
 
     public String getReminder() {
