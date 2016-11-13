@@ -47,4 +47,5 @@
     <string name="connect">Connect</string>
     <string name="listOfNotification">List of Notification</string>
     <string name="Assist">Assist</string>
+    <string name="PleaseEnableNotificationAccess">Please Enable Notification Access</string>
 </resources>
