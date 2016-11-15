@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.activity.AssistantActivity;
@@ -69,6 +70,14 @@ public class ConnectionFragment extends Fragment {
     private void makeConnection() {
         ipAddr = ip.getText().toString();
         boolean connected = naoqi.isRunning();
+        // todo add progress dialog
+        /*
+        new MaterialDialog.Builder(this)
+            .title(R.string.progress_dialog)
+            .content(R.string.please_wait)
+            .progress(true, 0)
+            .show();
+         */
         if(!connected){
             naoqi.init("tcp://"+ipAddr+":9559");
             connected = naoqi.isRunning();
@@ -88,6 +97,11 @@ public class ConnectionFragment extends Fragment {
 //            onConnectionListener.onConnected();
             }else {
                 Log.e("connect: ", "*****************" );
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.Connection_failed)
+                        .content(R.string.Connection_failed_content)
+                        .positiveText(R.string.OK)
+                        .show();
             }
         }
 //        else {
