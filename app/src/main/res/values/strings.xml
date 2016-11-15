@@ -48,4 +48,9 @@
     <string name="listOfNotification">List of Notification</string>
     <string name="Assist">Assist</string>
     <string name="PleaseEnableNotificationAccess">Please Enable Notification Access</string>
+    <string name="Connection_failed">Connection Failed</string>
+    <string name="Connection_failed_content">Please check the internet connection</string>
+    <string name="OK">OK</string>
+    <string name="connection_progress_title">Connecting</string>
+    <string name="please_wait">Please wait...</string>
 </resources>
