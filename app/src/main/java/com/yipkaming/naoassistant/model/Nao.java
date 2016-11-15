@@ -7,9 +7,9 @@ import com.aldebaran.qi.Session;
  * Created by Yip on 13/10/2016.
  */
 
-public class Naoqi {
+public class Nao {
 
-    private static Naoqi instance;
+    private static Nao instance;
 
     private String _IP;
     private Application app;
@@ -20,7 +20,7 @@ public class Naoqi {
         return running;
     }
 
-    private Naoqi(){};
+    private Nao(){};
 
     public void init(String IP){
         try {
@@ -53,9 +53,9 @@ public class Naoqi {
         return _IP;
     }
 
-    public synchronized static Naoqi getInstance() {
+    public synchronized static Nao getInstance() {
         if(instance == null){
-            instance = new Naoqi();
+            instance = new Nao();
         }
         return instance;
     }
