@@ -18,7 +18,7 @@ import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.activity.AssistantActivity;
 import com.yipkaming.naoassistant.model.Config;
-import com.yipkaming.naoassistant.model.Naoqi;
+import com.yipkaming.naoassistant.model.Nao;
 
 
 public class ConnectionFragment extends Fragment {
@@ -27,7 +27,7 @@ public class ConnectionFragment extends Fragment {
 
     private static ConnectionFragment instance;
 
-    private Naoqi naoqi;
+    private Nao nao;
 
     private OnConnectionListener onConnectionListener;
 
@@ -50,13 +50,13 @@ public class ConnectionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ip = (EditText) view.findViewById(R.id.ip);
         connect = (Button) view.findViewById(R.id.connect);
-        naoqi = Naoqi.getInstance();
+        nao = Nao.getInstance();
         setupUIListener();
     }
 
     private void setupUIListener() {
-        if(naoqi.isRunning()){
-            setUIItems(naoqi.isRunning());
+        if(nao.isRunning()){
+            setUIItems(nao.isRunning());
         }else {
             connect.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,7 +69,7 @@ public class ConnectionFragment extends Fragment {
 
     private void makeConnection() {
         ipAddr = ip.getText().toString();
-        boolean connected = naoqi.isRunning();
+        boolean connected = nao.isRunning();
         // todo add progress dialog
         /*
         new MaterialDialog.Builder(this)
@@ -78,14 +78,13 @@ public class ConnectionFragment extends Fragment {
             .progress(true, 0)
             .show();
          */
-        if(!connected){
-            naoqi.init("tcp://"+ipAddr+":9559");
-            connected = naoqi.isRunning();
+            nao.init("tcp://"+ipAddr+":9559");
+            connected = nao.isRunning();
             if(connected){
                 Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
                 setUIItems(connected);
                 try {
-                    ALTextToSpeech tts = new ALTextToSpeech(naoqi.getSession());
+                    ALTextToSpeech tts = new ALTextToSpeech(nao.getSession());
                     tts.say("Connected");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -103,7 +102,7 @@ public class ConnectionFragment extends Fragment {
                         .positiveText(R.string.OK)
                         .show();
             }
-        }
+
 //        else {
 //            setUIItems(connected);
 //            Log.e(TAG, "makeConnection: " );
@@ -111,6 +110,7 @@ public class ConnectionFragment extends Fragment {
     }
 
     private void setUIItems(boolean isConnected){
+        ip.setText(Nao.getInstance().get_IP().substring(6));
         ip.setEnabled(!isConnected);
         connect.setText(R.string.connected);
         connect.setEnabled(!isConnected);
@@ -127,7 +127,6 @@ public class ConnectionFragment extends Fragment {
         }
     }
     public interface OnConnectionListener {
-        // TODO: Update argument type and name
         void onConnected();
     }
 
