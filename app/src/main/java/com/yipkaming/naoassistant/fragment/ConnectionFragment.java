@@ -1,6 +1,5 @@
 package com.yipkaming.naoassistant.fragment;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,21 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.activity.AssistantActivity;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Nao;
 
-
 public class ConnectionFragment extends Fragment {
 
     private static final String TAG = Config.getSimpleName(ConnectionFragment.class);
-
     private static ConnectionFragment instance;
 
     private Nao nao;
-
     private OnConnectionListener onConnectionListener;
 
     View view;
@@ -37,7 +32,6 @@ public class ConnectionFragment extends Fragment {
     String ipAddr;
 
     public ConnectionFragment() {}
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +63,6 @@ public class ConnectionFragment extends Fragment {
 
     private void makeConnection() {
         ipAddr = ip.getText().toString();
-        boolean connected = nao.isRunning();
         // todo add progress dialog
         /*
         new MaterialDialog.Builder(this)
@@ -78,39 +71,37 @@ public class ConnectionFragment extends Fragment {
             .progress(true, 0)
             .show();
          */
-            nao.init("tcp://"+ipAddr+":9559");
-            connected = nao.isRunning();
-            if(connected){
-                Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
-                setUIItems(connected);
-                try {
-                    ALTextToSpeech tts = new ALTextToSpeech(nao.getSession());
-                    tts.say("Connected");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                Intent intent = new Intent(getContext(), AssistantActivity.class);
-                startActivity(intent);
-                instance = this;
-//            onConnectionListener.onConnected();
-            }else {
-                Log.e("connect: ", "*****************" );
-                new MaterialDialog.Builder(getContext())
-                        .title(R.string.Connection_failed)
-                        .content(R.string.Connection_failed_content)
-                        .positiveText(R.string.OK)
-                        .show();
+        nao.init("tcp://"+ipAddr+":9559");
+        boolean connected = nao.isRunning();
+        if(connected){
+            Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
+            setUIItems(connected);
+            try {
+                nao.say("Connected");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-//        else {
-//            setUIItems(connected);
-//            Log.e(TAG, "makeConnection: " );
-//        }
+            Intent intent = new Intent(getContext(), AssistantActivity.class);
+            startActivity(intent);
+            instance = this;
+//            onConnectionListener.onConnected();
+        }else {
+            Log.e("connect: ", "*****************" );
+            new MaterialDialog.Builder(getContext())
+                    .title(R.string.Connection_failed)
+                    .content(R.string.Connection_failed_content)
+                    .positiveText(R.string.OK)
+                    .show();
+        }
     }
 
     private void setUIItems(boolean isConnected){
-        ip.setText(Nao.getInstance().get_IP().substring(6));
+        String ipStr = nao.get_IP();
+        if( ipStr != null){
+            ipStr = ipStr.substring(6);
+        }
+        ip.setText(ipStr);
         ip.setEnabled(!isConnected);
         connect.setText(R.string.connected);
         connect.setEnabled(!isConnected);
