@@ -2,6 +2,7 @@ package com.yipkaming.naoassistant.model;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.Session;
+import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
 /**
  * Created by Yip on 13/10/2016.
@@ -13,6 +14,7 @@ public class Nao {
 
     private String _IP;
     private Application app;
+    private ALTextToSpeech alTextToSpeech;
 
     private boolean running = false;
 
@@ -58,5 +60,13 @@ public class Nao {
             instance = new Nao();
         }
         return instance;
+    }
+
+    public void say(String content) throws Exception {
+        if( alTextToSpeech == null){
+            alTextToSpeech = new ALTextToSpeech(getSession());
+        }
+
+        alTextToSpeech.say(content);
     }
 }
