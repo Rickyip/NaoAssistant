@@ -56,7 +56,7 @@ public class Keyword extends RealmObject {
         new Keyword(i++, "com.android.vending", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 1).save(realm);
         new Keyword(i++, "com.google.android.gm", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 3).save(realm);
         new Keyword(i++, "com.google.android.calendar", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 5).save(realm);
-//        new Keyword(i++, "com.google.android.gm", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 3).save(realm);
+        new Keyword(i++, "com.google.calendar", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 5).save(realm);
 
     }
 
@@ -64,8 +64,12 @@ public class Keyword extends RealmObject {
         return realm.where(Keyword.class).findAll().sort("id");
     }
 
-    public static boolean findKeyWord(Realm realm, String word) {
-        RealmResults<Keyword> keywordRealmResults = realm.where(Keyword.class).equalTo("value", word).findAll().sort("id");
+    public static boolean findKeyWord(String word) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Keyword> keywordRealmResults = realm.where(Keyword.class)
+                .equalTo("value", word)
+                .findAll()
+                .sort("id");
         return !keywordRealmResults.isEmpty();
     }
 
