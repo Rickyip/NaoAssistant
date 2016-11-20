@@ -1,18 +1,28 @@
 package com.yipkaming.naoassistant.model;
 
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Yip on 7/11/2016.
  */
 
-public class NotificationMessage {
+public class NotificationMessage extends RealmObject{
+
     // this class can combine info from bundle.extra and notification
+    @PrimaryKey
+    private long time;
     private String title;
     private String packageName;
     private String tickerText;
     private String content;
     private String tag;
-    private long time;
     private int importance = 0;
+
+    public NotificationMessage() {
+    }
 
     public NotificationMessage(String title, String packageName, String content, String tag, long time, String tickerText) {
         this.title = title;
@@ -23,7 +33,22 @@ public class NotificationMessage {
         this.time = time;
     }
 
-    public void save(){}
+    public static RealmResults<NotificationMessage> findAll(Realm realm) {
+        return realm.where(NotificationMessage.class).findAll().sort("time");
+    }
+
+    public NotificationMessage save(Realm realm) {
+        realm.beginTransaction();
+        NotificationMessage notificationMessage = realm.copyToRealmOrUpdate(this);
+        realm.commitTransaction();
+        return notificationMessage;
+    }
+
+    public static void clearAll(Realm realm) {
+        realm.beginTransaction();
+        realm.delete(NotificationMessage.class);
+        realm.commitTransaction();
+    }
 
     public String getTickerText() {
         return tickerText;
