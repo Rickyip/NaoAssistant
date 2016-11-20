@@ -7,6 +7,9 @@ package com.yipkaming.naoassistant.model;
 public class VerbalReminder {
 
     private static final String SPACE = " ";
+    private static final String SAYING = "saying";
+    private static final String AGO = "ago";
+    private static final String COM_DOT = "com.";
     private String timeHeader = "You have a message at ";
     private String time;
     private String content;
@@ -21,17 +24,21 @@ public class VerbalReminder {
     public VerbalReminder(NotificationMessage notificationMessage) {
         this.time = String.valueOf(notificationMessage.getTime());
         this.content = notificationMessage.getContent();
-        this.app += notificationMessage.getPackageName();
+        String packageName = notificationMessage.getPackageName();
+        if(packageName.contains(COM_DOT)){
+            packageName = packageName.substring(4);
+        }
+        this.app += packageName;
     }
 
     public String getReminder() {
-        reminder = timeHeader+timeToDate()+content+app;
+        reminder = timeHeader+timeToDate() + SPACE + SAYING + SPACE + content + app;
         return reminder;
     }
 
 
     private String timeToDate(){
-        return DateFormat.getDateTime(time);
+        return DateFormat.getDaysHoursMinutes(Long.valueOf(time));
     }
 
 }
