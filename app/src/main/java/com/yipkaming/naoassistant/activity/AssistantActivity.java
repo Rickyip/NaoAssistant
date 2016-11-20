@@ -15,16 +15,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.yipkaming.naoassistant.fragment.ConnectionFragment;
 import com.yipkaming.naoassistant.helper.KeyboardHelper;
 import com.yipkaming.naoassistant.helper.NotificationMonitor;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.model.Config;
-import com.yipkaming.naoassistant.model.Naoqi;
-import com.yipkaming.naoassistant.model.VerbalReminder;
+import com.yipkaming.naoassistant.model.DateFormat;
+import com.yipkaming.naoassistant.model.Keyword;
+import com.yipkaming.naoassistant.model.NotificationMessage;
+import io.realm.Realm;
 
 
 public class AssistantActivity extends AppCompatActivity implements ConnectionFragment.OnConnectionListener{
@@ -32,12 +31,11 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     private static final String TAG = Config.getSimpleName(AssistantActivity.class);
     private boolean isEnabled = false;
 
-
     TextView messages;
     Button showList;
 
     NotificationManager manager;
-    ALTextToSpeech alTextToSpeech;
+    Realm realm = Realm.getDefaultInstance();
 
 
     @Override
@@ -51,7 +49,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         showList = (Button) findViewById(R.id.showList);
         manager= (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
-        setupBtnListener();
+//        setupBtnListener();
     }
 
 
@@ -80,85 +78,68 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         Log.e(TAG, "isEnabled = " + isEnabled );
         if (!isEnabled) {
             showConfirmDialog();
+        }else {
+            listCurrentNotification();
         }
     }
 
+    private String show() {
+        // todo: clear all data for testing purpose
+        NotificationMessage.clearAll(realm);
+        Keyword.clearAll(realm);
+        Keyword.init();
 
-    private boolean isEnabled() {
-        String pkgName = getPackageName();
-        final String flat = Settings.Secure.getString(getContentResolver(), Config.ENABLED_NOTIFICATION_LISTENERS);
-        if (!TextUtils.isEmpty(flat)) {
-            final String[] names = flat.split(":");
-            for (int i = 0; i < names.length; i++) {
-                final ComponentName cn = ComponentName.unflattenFromString(names[i]);
-                if (cn != null) {
-                    if (TextUtils.equals(pkgName, cn.getPackageName())) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-
-    private String getCurrentNotificationString() {
         String listNos = "";
         StatusBarNotification[] currentNos = NotificationMonitor.getCurrentNotifications();
         if (currentNos != null) {
-            VerbalReminder verbalReminders = null;
             for (int i = 0; i < currentNos.length; i++) {
                 StatusBarNotification currentNo = currentNos[i];
                 Bundle extra = currentNo.getNotification().extras;
-
-                listNos = i +" " + currentNo.getPackageName() + "\n" + listNos +
-                        "\n" + i + currentNo.getNotification().tickerText +
-                        "\n" + i + currentNo.getTag() + "\n" +
-                        "\n" + i + currentNo.toString() + "\n" +
-                        "\n" + i + extra.getCharSequence("android.text").toString() +
-//                        "\n" + i + extra.getCharSequence("android.subText").toString() +
-                        "\n" + i + extra.getCharSequence("android.title").toString() + "\n" ;
-
-                if(currentNo.getPackageName().contains("com"))
-                    verbalReminders = new VerbalReminder(currentNo.getPostTime()+"", extra.getCharSequence("android.title").toString());
-                // contentTitle, contentText, tickerText
-
-                Log.e(TAG, "getCurrentNotificationString: "+ verbalReminders.getReminder() );
-                if(verbalReminders != null) {
-                    Naoqi naoqi = Naoqi.getInstance();
-                    if(naoqi.isRunning()){
-                        try {
-                            alTextToSpeech = new ALTextToSpeech(naoqi.getSession());
-                            alTextToSpeech.say(verbalReminders.getReminder());
-                        } catch (CallError callError) {
-                            callError.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                String androidText = "", title = "";
+                if( extra != null ){
+                    if(extra.getCharSequence("android.text") != null){
+                        androidText = extra.getCharSequence("android.text").toString();
                     }
-
+                    if(extra.getCharSequence("android.title") != null){
+                        title = extra.getCharSequence("android.title").toString();
+                    }
                 }
+
+
+                NotificationMessage notificationMessage = new NotificationMessage(title
+                        , currentNo.getPackageName()
+                        , androidText
+                        , currentNo.getTag()
+                        , currentNo.getPostTime()
+                        , (String) currentNo.getNotification().tickerText );
+
+                notificationMessage.save(realm);
+
+//                Selection.getInstance().process(notificationMessage);
+
+
+                Log.e(TAG, "!@#$%^&*(): "+ DateFormat.getDaysHoursMinutes(notificationMessage.getTime()) );
+
             }
         }
+
         return listNos;
     }
 
     private void listCurrentNotification() {
         String result = "";
         if (isEnabled) {
-            int n = NotificationMonitor.mCurrentNotificationsCounts;
-            if (n == 0) {
+            int counts = NotificationMonitor.mCurrentNotificationsCounts;
+            if (counts == 0) {
                 result = getResources().getString(R.string.active_notification_count_zero);
             }else {
-                result = String.format(getResources().getQuantityString(R.plurals.active_notification_count_nonzero, n, n));
+                result = String.format(getResources().getQuantityString(R.plurals.active_notification_count_nonzero, counts, counts));
             }
-            result = result + "\n" + getCurrentNotificationString();
+            result = result + "\n" + show();
             messages.setText(result);
         }else {
             messages.setTextColor(Color.RED);
-            messages.setText("Please Enable Notification Access");
+            messages.setText(R.string.PleaseEnableNotificationAccess);
         }
     }
 
@@ -167,9 +148,11 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     }
 
     private void showConfirmDialog() {
+        // todo change to material dialog
+
         new AlertDialog.Builder(this)
                 .setMessage("Please enable NotificationMonitor access")
-                .setTitle("Notification Access")
+                .setTitle("NotificationMessage Access")
                 .setIconAttribute(android.R.attr.alertDialogIcon)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok,
@@ -187,6 +170,23 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                 .create().show();
     }
 
+
+    private boolean isEnabled() {
+        String packageName = getPackageName();
+        final String flat = Settings.Secure.getString(getContentResolver(), Config.ENABLED_NOTIFICATION_LISTENERS);
+        if (!TextUtils.isEmpty(flat)) {
+            final String[] names = flat.split(":");
+            for (int i = 0; i < names.length; i++) {
+                final ComponentName componentName = ComponentName.unflattenFromString(names[i]);
+                if (componentName != null) {
+                    if (TextUtils.equals(packageName, componentName.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public void onConnected() {
