@@ -7,13 +7,26 @@ import com.yipkaming.naoassistant.model.NotificationMessage;
  */
 
 public class SelectionHelper {
+    // Singleton pattern
+
+    private static SelectionHelper instance;
+
+    private SelectionHelper(){}
 
     public static void process(NotificationMessage notificationMessage){
+
         // 1. important application?
         // 2. if no, any keywords in content/ title?
         // 3. if 1 yes or 2 yes, pass to verbal message class
         // 4. if both no, notificationMessage.setImportance(1), and push to nao
         // 5. notificationMessage.save()   save to db
         // 6. end
+    }
+
+    public static SelectionHelper getInstance(){
+        if(instance == null){
+            instance = new SelectionHelper();
+        }
+        return instance;
     }
 }
