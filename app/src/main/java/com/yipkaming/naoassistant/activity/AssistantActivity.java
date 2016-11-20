@@ -19,6 +19,7 @@ import com.yipkaming.naoassistant.fragment.ConnectionFragment;
 import com.yipkaming.naoassistant.helper.KeyboardHelper;
 import com.yipkaming.naoassistant.helper.NotificationMonitor;
 import com.yipkaming.naoassistant.R;
+import com.yipkaming.naoassistant.helper.SelectionHelper;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.DateFormat;
 import com.yipkaming.naoassistant.model.Keyword;
@@ -32,7 +33,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     private boolean isEnabled = false;
 
     TextView messages;
-    Button showList;
+//    Button showList;
 
     NotificationManager manager;
     Realm realm = Realm.getDefaultInstance();
@@ -46,7 +47,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         initFragment();
 
         messages = (TextView) findViewById(R.id.messages);
-        showList = (Button) findViewById(R.id.showList);
+//        showList = (Button) findViewById(R.id.showList);
         manager= (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
 //        setupBtnListener();
@@ -60,14 +61,14 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                 .commit();
     }
 
-    private void setupBtnListener() {
-        showList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listCurrentNotification();
-            }
-        });
-    }
+//    private void setupBtnListener() {
+//        showList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                listCurrentNotification();
+//            }
+//        });
+//    }
 
 
     @Override
@@ -95,7 +96,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
             for (int i = 0; i < currentNos.length; i++) {
                 StatusBarNotification currentNo = currentNos[i];
                 Bundle extra = currentNo.getNotification().extras;
-                String androidText = "", title = "";
+                String androidText = "", title = "", multiline = "";
                 if( extra != null ){
                     if(extra.getCharSequence("android.text") != null){
                         androidText = extra.getCharSequence("android.text").toString();
@@ -103,22 +104,35 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                     if(extra.getCharSequence("android.title") != null){
                         title = extra.getCharSequence("android.title").toString();
                     }
+                    if(extra.getCharSequence("android.textLines") != null){
+                        multiline = extra.getCharSequence("android.textLines").length() +", "+ extra.getCharSequence("android.textLines");
+                    }
+
                 }
+                // cannot solve multi line problem in API 18
+                // read one first and then dismiss 
+                Log.e(TAG, "show: "+multiline );
+
+//                String content = "", test = "";
+//                content = extra.toString();
+//                test = currentNo.getNotification().toString();
 
 
                 NotificationMessage notificationMessage = new NotificationMessage(title
                         , currentNo.getPackageName()
-                        , androidText
-                        , currentNo.getTag()
+                        , androidText // content
+                        , currentNo.getTag() // tag
                         , currentNo.getPostTime()
-                        , (String) currentNo.getNotification().tickerText );
+                        , (String) currentNo.getNotification().tickerText ); // ticker text
 
-                notificationMessage.save(realm);
+                notificationMessage.save();
 
-//                Selection.getInstance().process(notificationMessage);
+                SelectionHelper.getInstance().process(notificationMessage);
 
 
-                Log.e(TAG, "!@#$%^&*(): "+ DateFormat.getDaysHoursMinutes(notificationMessage.getTime()) );
+//                Log.e(TAG, "!@#$%^&*(): "+ DateFormat.getDaysHoursMinutes(notificationMessage.getTime()) );
+
+//                Log.e(TAG, "show: "+ currentNo.getPackageName()+ " content: "+ test );
 
             }
         }

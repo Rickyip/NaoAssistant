@@ -17,24 +17,24 @@ tools:context="com.yipkaming.naoassistant.activity.AssistantActivity" >
         android:background="#E3F2FD"
         tools:context=".activity.AssistantActivity" />
 
-    <Button
-        android:id="@+id/showList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/connectFragment"
-        android:text="@string/Assist" />
+    <!--<Button-->
+        <!--android:id="@+id/showList"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/connectFragment"-->
+        <!--android:text="@string/Assist" />-->
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/showList">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_below="@+id/showList">-->
 
     <TextView
         android:id="@+id/messages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    </ScrollView>
+    <!--</ScrollView>-->
 
 </RelativeLayout>
