@@ -15,12 +15,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.yipkaming.naoassistant.model.Config;
+import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
+import com.yipkaming.naoassistant.model.VerbalReminder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class NotificationMonitor extends NotificationListenerService {
 
@@ -105,15 +105,11 @@ public class NotificationMonitor extends NotificationListenerService {
 
         Bundle extras = sbn.getNotification().extras;
         String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
-//        Bitmap notificationLargeIcon = ((Bitmap) extras.getParcelable(NotificationMessage.EXTRA_LARGE_ICON));
-//        Bitmap notificationSmallIcon = ((Bitmap) extras.getParcelable(NotificationMessage.EXTRA_SMALL_ICON));
         CharSequence notificationText = extras.getCharSequence(Notification.EXTRA_TEXT);
         CharSequence notificationSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
-        Log.i(TAG, "notificationTitle:"+notificationTitle);
-        Log.i(TAG, "notificationText:"+notificationText);
-        Log.i(TAG, "notificationSubText:"+notificationSubText);
-//        Log.i(TAG, "notificationLargeIcon is null:"+(notificationLargeIcon == null));
-//        Log.i(TAG, "notificationSmallIcon is null:"+(notificationSmallIcon == null));
+//        Log.i(TAG, "notificationTitle:"+notificationTitle);
+//        Log.i(TAG, "notificationText:"+notificationText);
+//        Log.i(TAG, "notificationSubText:"+notificationSubText);
         String androidText = "", title = "";
         if( extras != null ){
             if(extras.getCharSequence("android.text") != null){
@@ -129,8 +125,9 @@ public class NotificationMonitor extends NotificationListenerService {
                 , sbn.getTag()
                 , sbn.getPostTime()
                 , sbn.getNotification().tickerText.toString() );
-//                notificationMessage.save();
-        Log.e(TAG, "getTitle: "+ notificationMessage.getTitle() );
+                notificationMessage.save();
+
+        SelectionHelper.getInstance().process(notificationMessage);
     }
 
     @Override
