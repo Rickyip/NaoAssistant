@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.activity.AssistantActivity;
+import com.yipkaming.naoassistant.helper.KeyboardHelper;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Nao;
 
@@ -85,6 +86,7 @@ public class ConnectionFragment extends Fragment {
             Intent intent = new Intent(getContext(), AssistantActivity.class);
             startActivity(intent);
             instance = this;
+            KeyboardHelper.closeKeyboardFromFragment(getContext(), view);
 //            onConnectionListener.onConnected();
         }else {
             Log.e("connect: ", "*****************" );

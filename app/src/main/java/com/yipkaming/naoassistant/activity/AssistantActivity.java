@@ -74,7 +74,6 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     @Override
     protected void onResume() {
         super.onResume();
-        KeyboardHelper.closeKeyboardFromActivity(this);
         isEnabled = isEnabled();
         Log.e(TAG, "isEnabled = " + isEnabled );
         if (!isEnabled) {
