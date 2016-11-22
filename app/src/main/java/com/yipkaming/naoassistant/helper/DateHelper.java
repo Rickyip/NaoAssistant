@@ -1,4 +1,4 @@
-package com.yipkaming.naoassistant.model;
+package com.yipkaming.naoassistant.helper;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by Yip on 10/10/2016.
  */
 
-public class DateFormat {
+public class DateHelper {
 
     private static final String TODAY = "Today ";
     private static final String YESTERDAY = "Yesterday ";
