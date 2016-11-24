@@ -14,10 +14,9 @@ import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.yipkaming.naoassistant.NaoAssistant;
 import com.yipkaming.naoassistant.model.Config;
-import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
-import com.yipkaming.naoassistant.model.VerbalReminder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +28,15 @@ public class NotificationMonitor extends NotificationListenerService {
     private static final int EVENT_UPDATE_CURRENT_NOS = 0;
     public static final String ACTION_NLS_CONTROL = "com.yipkaming.naoassistant.NLSCONTROL";
 
-    public static List<StatusBarNotification[]> mCurrentNotifications = new ArrayList<StatusBarNotification[]>();
-    public static int mCurrentNotificationsCounts = 0;
-    public static StatusBarNotification mPostedNotification;
-    public static StatusBarNotification mRemovedNotification;
-    private CancelNotificationReceiver mReceiver = new CancelNotificationReceiver();
+    public static List<StatusBarNotification[]> currentNotifications = new ArrayList<StatusBarNotification[]>();
+    public static int currentNotificationsCounts = 0;
+    public static StatusBarNotification postedNotification;
+    public static StatusBarNotification removedNotification;
+    private CancelNotificationReceiver cancelNotificationReceiver = new CancelNotificationReceiver();
     // String a;
     private static NotificationMonitor notificationMonitor;
 
-    private Handler mMonitorHandler = new Handler() {
+    private Handler monitorHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -60,8 +59,8 @@ public class NotificationMonitor extends NotificationListenerService {
                 if (action.equals(ACTION_NLS_CONTROL)) {
                     String command = intent.getStringExtra("command");
                     if (TextUtils.equals(command, "cancel_last")) {
-                        if (mCurrentNotifications != null && mCurrentNotificationsCounts >= 1) {
-                            StatusBarNotification sbnn = getCurrentNotifications()[mCurrentNotificationsCounts - 1];
+                        if (currentNotifications != null && currentNotificationsCounts >= 1) {
+                            StatusBarNotification sbnn = getCurrentNotifications()[currentNotificationsCounts - 1];
                             cancelNotification(sbnn.getPackageName(), sbnn.getTag(), sbnn.getId());
                         }
                     } else if (TextUtils.equals(command, "cancel_all")) {
@@ -78,15 +77,15 @@ public class NotificationMonitor extends NotificationListenerService {
         super.onCreate();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_NLS_CONTROL);
-        registerReceiver(mReceiver, filter);
-        mMonitorHandler.sendMessage(mMonitorHandler.obtainMessage(EVENT_UPDATE_CURRENT_NOS));
+        registerReceiver(cancelNotificationReceiver, filter);
+        monitorHandler.sendMessage(monitorHandler.obtainMessage(EVENT_UPDATE_CURRENT_NOS));
         notificationMonitor = this;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
+        unregisterReceiver(cancelNotificationReceiver);
     }
 
     @Override
@@ -99,8 +98,8 @@ public class NotificationMonitor extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         updateCurrentNotifications();
         Log.e(TAG, "onNotificationPosted: " );
-        Log.i(TAG, "have " + mCurrentNotificationsCounts + " active notifications");
-        mPostedNotification = sbn;
+        Log.i(TAG, "have " + currentNotificationsCounts + " active notifications");
+        postedNotification = sbn;
 
 
         Bundle extras = sbn.getNotification().extras;
@@ -110,13 +109,17 @@ public class NotificationMonitor extends NotificationListenerService {
 //        Log.i(TAG, "notificationTitle:"+notificationTitle);
 //        Log.i(TAG, "notificationText:"+notificationText);
 //        Log.i(TAG, "notificationSubText:"+notificationSubText);
-        String androidText = "", title = "";
+        String androidText = "", title = "", multiline = "";
         if( extras != null ){
             if(extras.getCharSequence("android.text") != null){
                 androidText = extras.getCharSequence("android.text").toString();
             }
             if(extras.getCharSequence("android.title") != null){
                 title = extras.getCharSequence("android.title").toString();
+            }
+            if(extras.getCharSequence("android.textLines") != null){
+                multiline = extras.getCharSequence("android.textLines").length() +", "+ extras.getCharSequence("android.textLines");
+                Log.e(TAG, "show: "+multiline );
             }
         }
         NotificationMessage notificationMessage = new NotificationMessage(title
@@ -128,22 +131,24 @@ public class NotificationMonitor extends NotificationListenerService {
                 notificationMessage.save();
 
         SelectionHelper.getInstance().process(notificationMessage);
+
+//        NaoAssistant.getNotificationManager().cancel(sbn.getTag(), sbn.getId());
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         updateCurrentNotifications();
-        mRemovedNotification = sbn;
+        removedNotification = sbn;
     }
 
     private void updateCurrentNotifications() {
         try {
             StatusBarNotification[] activeNos = getActiveNotifications();
-            if (mCurrentNotifications.size() == 0) {
-                mCurrentNotifications.add(null);
+            if (currentNotifications.size() == 0) {
+                currentNotifications.add(null);
             }
-            mCurrentNotifications.set(0, activeNos);
-            mCurrentNotificationsCounts = activeNos.length;
+            currentNotifications.set(0, activeNos);
+            currentNotificationsCounts = activeNos.length;
         } catch (Exception e) {
             Log.i(TAG, "Should not be here!!");
             e.printStackTrace();
@@ -151,11 +156,11 @@ public class NotificationMonitor extends NotificationListenerService {
     }
 
     public static StatusBarNotification[] getCurrentNotifications() {
-        if (mCurrentNotifications.size() == 0) {
-            Log.i(TAG, "mCurrentNotifications size is ZERO!!");
+        if (currentNotifications.size() == 0) {
+            Log.i(TAG, "currentNotifications size is ZERO!!");
             return null;
         }
-        return mCurrentNotifications.get(0);
+        return currentNotifications.get(0);
     }
 
 

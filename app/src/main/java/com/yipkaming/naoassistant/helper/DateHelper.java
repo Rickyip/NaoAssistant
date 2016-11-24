@@ -15,15 +15,15 @@ public class DateHelper {
     private static final String YESTERDAY = "Yesterday ";
     private static final String TOMORROW = "Tomorrow ";
 
-    private static long today = System.currentTimeMillis() ;
+    private static long now = System.currentTimeMillis() ;
 //    private final static long oneDay =
 
     public static String getDateTime(String timestamp){
         String date = getDate(Long.parseLong(timestamp));
-        //todo make it contain "today" "yesterday" "tomorrow"
+        //todo make it contain "now" "yesterday" "tomorrow"
         Log.e( "getDateTime: ", date.substring(0, 10));
-        Log.e( "today: ", getToday());
-        if(date.substring(0, 10).equals(getToday().substring(0, 10))){
+        Log.e( "now: ", getNow());
+        if(date.substring(0, 10).equals(getNow().substring(0, 10))){
             date = TODAY+date.substring(11);
             Log.e( "getDateTime: ", date);
         }
@@ -36,13 +36,13 @@ public class DateHelper {
         return sf.format(date);
     }
 
-    public static String getToday(){
+    public static String getNow(){
         return getDate(System.currentTimeMillis());
     }
 
     public static String getDaysHoursMinutes(long timestamp){
         //in milliseconds
-        long diff = today - timestamp;
+        long diff = now - timestamp;
 
         long diffSeconds = diff / 1000 % 60;
         long diffMinutes = diff / (60 * 1000) % 60;

@@ -1,8 +1,9 @@
 package com.yipkaming.naoassistant.activity;
 
 import android.app.AlertDialog;
-import android.app.NotificationManager;
+import android.app.Notification;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,16 +13,13 @@ import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+
 import com.yipkaming.naoassistant.fragment.ConnectionFragment;
-import com.yipkaming.naoassistant.helper.KeyboardHelper;
 import com.yipkaming.naoassistant.helper.NotificationMonitor;
 import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.helper.SelectionHelper;
 import com.yipkaming.naoassistant.model.Config;
-import com.yipkaming.naoassistant.model.DateFormat;
 import com.yipkaming.naoassistant.model.Keyword;
 import com.yipkaming.naoassistant.model.NotificationMessage;
 import io.realm.Realm;
@@ -35,7 +33,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     TextView messages;
 //    Button showList;
 
-    NotificationManager manager;
+//    private NotificationManager manager;
     Realm realm = Realm.getDefaultInstance();
 
 
@@ -48,7 +46,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
 
         messages = (TextView) findViewById(R.id.messages);
 //        showList = (Button) findViewById(R.id.showList);
-        manager= (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+//        manager = NaoAssistant.getNotificationManager();
 
 //        setupBtnListener();
     }
@@ -105,31 +103,41 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                     }
                     if(extra.getCharSequence("android.textLines") != null){
                         multiline = extra.getCharSequence("android.textLines").length() +", "+ extra.getCharSequence("android.textLines");
+                        Log.e(TAG, "show: "+multiline );
                     }
+
+
 
                 }
                 // cannot solve multi line problem in API 18
-                // read one first and then dismiss 
-                Log.e(TAG, "show: "+multiline );
-
-//                String content = "", test = "";
-//                content = extra.toString();
-//                test = currentNo.getNotification().toString();
-
-
+                // read one first and then dismiss
+                Object content, test;
+                content =  extra.get(Notification.EXTRA_BIG_TEXT);
+                test =  extra.get(Notification.EXTRA_TEXT);
+                if(content != null){
+                    Log.e(TAG, "show: content, "+content.toString());
+                }
+                Log.e(TAG, "show: " );
+                if(test != null){
+                    Log.e(TAG, "show: test "+test.toString());
+                }
+                String ticker = "";
+                if(currentNo.getNotification().tickerText != null){
+                    ticker = currentNo.getNotification().tickerText.toString();
+                }
                 NotificationMessage notificationMessage = new NotificationMessage(title
                         , currentNo.getPackageName()
                         , androidText // content
                         , currentNo.getTag() // tag
                         , currentNo.getPostTime()
-                        , (String) currentNo.getNotification().tickerText ); // ticker text
-
+                        , ticker ); // ticker text
+//                        ,"");
                 notificationMessage.save();
 
                 SelectionHelper.getInstance().process(notificationMessage);
 
-
-//                Log.e(TAG, "!@#$%^&*(): "+ DateFormat.getDaysHoursMinutes(notificationMessage.getTime()) );
+//                cancelNotification(this, false);
+//                Log.e(TAG, "!@#$%^&*(): "+ DateHelper.getDaysHoursMinutes(notificationMessage.getTime()) );
 
 //                Log.e(TAG, "show: "+ currentNo.getPackageName()+ " content: "+ test );
 
@@ -142,7 +150,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     private void listCurrentNotification() {
         String result = "";
         if (isEnabled) {
-            int counts = NotificationMonitor.mCurrentNotificationsCounts;
+            int counts = NotificationMonitor.currentNotificationsCounts;
             if (counts == 0) {
                 result = getResources().getString(R.string.active_notification_count_zero);
             }else {
@@ -156,7 +164,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         }
     }
 
-    private void openNotificationAccess() {
+    private void openNotificationSetting() {
         startActivity(new Intent(Config.ACTION_NOTIFICATION_LISTENER_SETTINGS));
     }
 
@@ -171,7 +179,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                openNotificationAccess();
+                                openNotificationSetting();
                             }
                         })
                 .setNegativeButton(android.R.string.cancel,
@@ -201,6 +209,18 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         return false;
     }
 
+
+    protected void cancelNotification(Context context, boolean isCancelAll) {
+        Intent intent = new Intent();
+        intent.setAction(NotificationMonitor.ACTION_NLS_CONTROL);
+        if (isCancelAll) {
+            intent.putExtra("command", "cancel_all");
+        }else {
+            intent.putExtra("command", "cancel_last");
+        }
+        context.sendBroadcast(intent);
+    }
+
     @Override
     public void onConnected() {
         // do nothing
@@ -208,6 +228,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
 
     @Override
     public void onBackPressed() {
-
+        // forbid user to disconnect with nao
     }
+
 }

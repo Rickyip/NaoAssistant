@@ -1,5 +1,7 @@
 package com.yipkaming.naoassistant.model;
 
+import com.yipkaming.naoassistant.helper.DateHelper;
+
 /**
  * Created by Yip on 7/10/2016.
  */
@@ -10,7 +12,7 @@ public class VerbalReminder {
     private static final String SAYING = "saying";
     private static final String AGO = "ago";
     private static final String COM_DOT = "com.";
-    private String timeHeader = "You have a message at ";
+    private static final String HEADER = "You have a message ";
     private String time;
     private String content;
     private String app = "from ";
@@ -32,13 +34,13 @@ public class VerbalReminder {
     }
 
     public String getReminder() {
-        reminder = timeHeader+timeToDate() + SPACE + SAYING + SPACE + content + app;
+        reminder = HEADER + timeToDate() + SPACE + SAYING + SPACE + content + SPACE + app;
         return reminder;
     }
 
 
     private String timeToDate(){
-        return DateFormat.getDaysHoursMinutes(Long.valueOf(time));
+        return DateHelper.getDaysHoursMinutes(Long.valueOf(time));
     }
 
 }
