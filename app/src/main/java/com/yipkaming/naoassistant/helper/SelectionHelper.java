@@ -26,7 +26,7 @@ public class SelectionHelper {
             VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
             try {
                 Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
-//                Nao.getInstance().say(verbalReminder.getReminder());
+                Nao.getInstance().say(verbalReminder.getReminder());
             } catch (Exception e) {
                 e.printStackTrace();
             }

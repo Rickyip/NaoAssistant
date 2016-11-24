@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/robot_ip"
             android:textSize="30sp"
-            android:text="192.168.0.101"/>
+            android:text="192.168.0.103"/>
         <Button
             android:id="@+id/connect"
             android:layout_width="match_parent"
