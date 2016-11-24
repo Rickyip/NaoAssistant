@@ -1,10 +1,10 @@
-package com.yipkaming.naoassistant;
+package com.yipkaming.naoassistant.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.yipkaming.naoassistant.activity.AssistantActivity;
+import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.fragment.ConnectionFragment;
 import com.yipkaming.naoassistant.model.Config;
 
@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initFragment();
+//        onConnected();
     }
 
     private void initFragment() {
