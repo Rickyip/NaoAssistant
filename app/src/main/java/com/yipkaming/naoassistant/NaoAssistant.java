@@ -1,6 +1,7 @@
 package com.yipkaming.naoassistant;
 
 import android.app.Application;
+import android.app.NotificationManager;
 
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
@@ -18,6 +19,7 @@ public class NaoAssistant extends Application {
     private static final String TAG = Config.getSimpleName(NaoAssistant.class);
 
     private static NaoAssistant context;
+    private static NotificationManager notificationManager;
 
     @Override
     public void onCreate() {
@@ -65,5 +67,10 @@ public class NaoAssistant extends Application {
         return context;
     }
 
-
+    public static NotificationManager getNotificationManager() {
+        if( notificationManager == null){
+            notificationManager = (NotificationManager) getContext().getSystemService(NOTIFICATION_SERVICE);
+        }
+        return notificationManager;
+    }
 }
