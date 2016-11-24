@@ -37,11 +37,12 @@ public class NotificationMessage extends RealmObject{
         return realm.where(NotificationMessage.class).findAll().sort("time");
     }
 
-    public NotificationMessage save(Realm realm) {
+
+    public void save() {
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        NotificationMessage notificationMessage = realm.copyToRealmOrUpdate(this);
+        realm.copyToRealmOrUpdate(this);
         realm.commitTransaction();
-        return notificationMessage;
     }
 
     public static void clearAll(Realm realm) {

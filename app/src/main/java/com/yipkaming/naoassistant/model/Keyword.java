@@ -73,11 +73,11 @@ public class Keyword extends RealmObject {
         return !keywordRealmResults.isEmpty();
     }
 
-    public Keyword save(Realm realm) {
+    public void save(Realm realm) {
         realm.beginTransaction();
-        Keyword keyword = realm.copyToRealmOrUpdate(this);
+        realm.copyToRealmOrUpdate(this);
         realm.commitTransaction();
-        return keyword;
+//        return keyword;
     }
 
     public static void clearAll(Realm realm) {
