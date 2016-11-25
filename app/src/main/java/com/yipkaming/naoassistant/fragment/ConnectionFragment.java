@@ -64,14 +64,15 @@ public class ConnectionFragment extends Fragment {
 
     private void makeConnection() {
         ipAddr = ip.getText().toString();
+
         // todo add progress dialog
-        /*
-        new MaterialDialog.Builder(this)
-            .title(R.string.progress_dialog)
+
+        MaterialDialog progress = new MaterialDialog.Builder(getContext())
+            .title(R.string.connection_progress_title)
             .content(R.string.please_wait)
             .progress(true, 0)
             .show();
-         */
+
         nao.init(Nao.CONNECTION_HEADER+ipAddr+":"+Nao.PORT);
         boolean connected = nao.isRunning();
         if(connected){
@@ -83,13 +84,15 @@ public class ConnectionFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Intent intent = new Intent(getContext(), AssistantActivity.class);
-            startActivity(intent);
             instance = this;
             KeyboardHelper.closeKeyboardFromFragment(getContext(), view);
-//            onConnectionListener.onConnected();
+            onConnectionListener.onConnected();
+
+            progress.dismiss();
         }else {
             Log.e("connect: ", "*****************" );
+
+            progress.dismiss();
             new MaterialDialog.Builder(getContext())
                     .title(R.string.Connection_failed)
                     .content(R.string.Connection_failed_content)
@@ -111,8 +114,7 @@ public class ConnectionFragment extends Fragment {
         if (context instanceof OnConnectionListener) {
             onConnectionListener = (OnConnectionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
     public interface OnConnectionListener {
