@@ -8,6 +8,8 @@ import com.yipkaming.naoassistant.helper.DateHelper;
 
 public class VerbalReminder {
 
+    public static final String CONNECTION_GREETING = "Hi! I have connected to device " + Config.DEVICE_NAME;
+
     private static final String SPACE = " ";
     private static final String SAYING = "saying";
     private static final String AGO = "ago";
