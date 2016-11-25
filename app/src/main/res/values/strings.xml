@@ -2,11 +2,11 @@
 
     <string name="action_settings">Settings</string>
     <string name="close_hand">Close hands</string>
-    <string name="connected">Connected.</string>
+    <string name="Connected">Connected</string>
     <string name="connection_lost">Connection lost.</string>
     <string name="connecting_message">Please wait. Trying to connect.</string>
 
-    <string name="disconnect">Disconnect</string>
+    <string name="Disconnect">Disconnect</string>
     <string name="default_ip">192.168.43.68</string>
 
     <string name="hello_world">Hello world!</string>
