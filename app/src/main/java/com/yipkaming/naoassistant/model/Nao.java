@@ -20,8 +20,6 @@ public class Nao {
     public static final String CONNECTION_HEADER = "tcp://";
 
 
-
-
     private static Nao instance;
 
     private String url;

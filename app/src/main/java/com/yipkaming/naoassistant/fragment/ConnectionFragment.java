@@ -85,8 +85,9 @@ public class ConnectionFragment extends Fragment {
             }
 
             instance = this;
-            KeyboardHelper.closeKeyboardFromFragment(getContext(), view);
             onConnectionListener.onConnected();
+            KeyboardHelper.closeKeyboardFromFragment(getContext(), view);
+
 
             progress.dismiss();
         }else {
@@ -117,6 +118,7 @@ public class ConnectionFragment extends Fragment {
             throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
+
     public interface OnConnectionListener {
         void onConnected();
     }

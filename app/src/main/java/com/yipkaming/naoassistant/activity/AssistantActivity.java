@@ -99,7 +99,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
             for (int i = 0; i < currentNos.length; i++) {
                 StatusBarNotification currentNo = currentNos[i];
                 Bundle extra = currentNo.getNotification().extras;
-                String androidText = "", title = "", multiline = "";
+                String androidText = "", title = "", multiline = "", ticker = "";
                 if( extra != null ){
                     if(extra.getCharSequence("android.text") != null){
                         androidText = extra.getCharSequence("android.text").toString();
@@ -111,26 +111,27 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                         multiline = extra.getCharSequence("android.textLines").length() +", "+ extra.getCharSequence("android.textLines");
                         Log.e(TAG, "show: "+multiline );
                     }
+                }
 
-
-
+                if(currentNo.getNotification().tickerText != null){
+                    ticker = currentNo.getNotification().tickerText.toString();
                 }
                 // cannot solve multi line problem in API 18
                 // read one first and then dismiss
                 Object content, test;
                 content =  extra.get(Notification.EXTRA_BIG_TEXT);
                 test =  extra.get(Notification.EXTRA_TEXT);
+
                 if(content != null){
                     Log.e(TAG, "show: content, "+content.toString());
                 }
                 Log.e(TAG, "show: " );
+
                 if(test != null){
                     Log.e(TAG, "show: test "+test.toString());
                 }
-                String ticker = "";
-                if(currentNo.getNotification().tickerText != null){
-                    ticker = currentNo.getNotification().tickerText.toString();
-                }
+
+
                 NotificationMessage notificationMessage = new NotificationMessage(title
                         , currentNo.getPackageName()
                         , androidText // content
@@ -143,21 +144,17 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                 SelectionHelper.getInstance().process(notificationMessage);
 
 //                cancelNotification(this, false);
-//                Log.e(TAG, "!@#$%^&*(): "+ DateHelper.getDaysHoursMinutes(notificationMessage.getTime()) );
-
-//                Log.e(TAG, "show: "+ currentNo.getPackageName()+ " content: "+ test );
-
             }
         }
 
-        nao = Nao.getInstance();
-        try {
-            nao.startVoiceRecognition();
-            nao.wait();
-            nao.endVoiceRecognition();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        nao = Nao.getInstance();
+//        try {
+//            nao.startVoiceRecognition();
+//            nao.wait();
+//            nao.endVoiceRecognition();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         return listNos;
     }
