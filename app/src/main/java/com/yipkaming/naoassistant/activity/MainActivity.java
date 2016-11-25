@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initFragment();
-//        onConnected();
     }
 
     private void initFragment() {
@@ -35,5 +33,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionFragmen
     private void startAssistant() {
         Intent intent = new Intent(this, AssistantActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initFragment();
+//        onConnected();
     }
 }
