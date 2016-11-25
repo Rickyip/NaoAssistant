@@ -72,13 +72,13 @@ public class ConnectionFragment extends Fragment {
             .progress(true, 0)
             .show();
          */
-        nao.init("tcp://"+ipAddr+":9559");
+        nao.init(Nao.CONNECTION_HEADER+ipAddr+":"+Nao.PORT);
         boolean connected = nao.isRunning();
         if(connected){
             Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
             setUIItems(connected);
             try {
-                nao.say("Connected");
+                nao.sayConnectionGreeting();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -99,13 +99,9 @@ public class ConnectionFragment extends Fragment {
     }
 
     private void setUIItems(boolean isConnected){
-        String ipStr = nao.get_IP();
-        if( ipStr != null){
-            ipStr = ipStr.substring(6);
-        }
-        ip.setText(ipStr);
+        ip.setText(nao.getIpAddress());
         ip.setEnabled(!isConnected);
-        connect.setText(R.string.connected);
+        connect.setText(R.string.Connected);
         connect.setEnabled(!isConnected);
     }
 
@@ -129,5 +125,9 @@ public class ConnectionFragment extends Fragment {
             instance = new ConnectionFragment();
         }
         return instance;
+    }
+
+    public static void setInstance(ConnectionFragment instance) {
+        ConnectionFragment.instance = instance;
     }
 }
