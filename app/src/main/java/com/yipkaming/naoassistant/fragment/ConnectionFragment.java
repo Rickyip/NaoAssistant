@@ -1,7 +1,6 @@
 package com.yipkaming.naoassistant.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.yipkaming.naoassistant.R;
-import com.yipkaming.naoassistant.activity.AssistantActivity;
 import com.yipkaming.naoassistant.helper.KeyboardHelper;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Nao;
