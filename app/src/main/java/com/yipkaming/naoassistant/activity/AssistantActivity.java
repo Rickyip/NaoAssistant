@@ -13,6 +13,8 @@ import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.yipkaming.naoassistant.fragment.ConnectionFragment;
@@ -21,6 +23,7 @@ import com.yipkaming.naoassistant.R;
 import com.yipkaming.naoassistant.helper.SelectionHelper;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Keyword;
+import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
 import io.realm.Realm;
 
@@ -30,11 +33,14 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     private static final String TAG = Config.getSimpleName(AssistantActivity.class);
     private boolean isEnabled = false;
 
+    private Realm realm = Realm.getDefaultInstance();
+    private Nao nao;
+
     TextView messages;
 //    Button showList;
+    MenuItem disconnectBtn;
 
-//    private NotificationManager manager;
-    Realm realm = Realm.getDefaultInstance();
+    //    private NotificationManager manager;
 
 
     @Override
@@ -131,7 +137,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                         , currentNo.getTag() // tag
                         , currentNo.getPostTime()
                         , ticker ); // ticker text
-//                        ,"");
+
                 notificationMessage.save();
 
                 SelectionHelper.getInstance().process(notificationMessage);
@@ -142,6 +148,15 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
 //                Log.e(TAG, "show: "+ currentNo.getPackageName()+ " content: "+ test );
 
             }
+        }
+
+        nao = Nao.getInstance();
+        try {
+            nao.startVoiceRecognition();
+            nao.wait();
+            nao.endVoiceRecognition();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return listNos;
@@ -219,6 +234,40 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
             intent.putExtra("command", "cancel_last");
         }
         context.sendBroadcast(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_assistant, menu);
+        disconnectBtn = menu.findItem(R.id.Disconnect);
+
+        displayAndHideDisconnectBtn();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void displayAndHideDisconnectBtn() {
+        nao = Nao.getInstance();
+        disconnectBtn.setVisible(nao.isRunning());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.Disconnect:
+                disconnect();
+                return true;
+        }
+        return false;
+
+    }
+
+    private void disconnect() {
+        nao = Nao.getInstance();
+        nao.stop();
+        ConnectionFragment.setInstance(null);
+        finish();
+
     }
 
     @Override
