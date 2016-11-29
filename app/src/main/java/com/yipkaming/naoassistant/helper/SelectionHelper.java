@@ -22,7 +22,41 @@ public class SelectionHelper {
     private SelectionHelper(){}
 
     public void process(NotificationMessage notificationMessage){
+        int importance = 1;
+        boolean present = false;
         if(Keyword.findKeyWord(notificationMessage.getPackageName())){
+            present = true;
+            importance = 3;
+        } else {
+            String[] titleFragments = notificationMessage.getTitle().split(VerbalReminder.SPACE);
+            String[] contentFragments = notificationMessage.getContent().split(VerbalReminder.SPACE);
+            int sizeOfTitleFragment = titleFragments.length;
+            int sizeOfContentFragment = contentFragments.length;
+            if(sizeOfTitleFragment != 0){
+                for(int i = 0; i < sizeOfTitleFragment; i++){
+                    Log.e(TAG, "process: " + titleFragments[i]);
+                    if(Keyword.findKeyWord(titleFragments[i])){
+                        present = true;
+                        importance = 4;
+                    }
+                }
+            }
+            if(sizeOfContentFragment != 0){
+                for(int i = 0; i < sizeOfContentFragment; i++){
+                    Log.e(TAG, "process: " + contentFragments[i]);
+                    if(Keyword.findKeyWord(contentFragments[i])){
+                        present = true;
+                        importance = 4;
+                    }
+                }
+            }
+
+        }
+        Log.e(TAG, "process: "+ notificationMessage.getContent() + ": "+ importance );
+        notificationMessage.setImportance(importance);
+        notificationMessage.save();
+
+        if(true){
             VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
             try {
                 Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
