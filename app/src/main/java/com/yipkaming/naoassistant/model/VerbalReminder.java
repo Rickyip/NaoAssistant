@@ -10,11 +10,11 @@ public class VerbalReminder {
 
     public static final String CONNECTION_GREETING = "Hi! I have connected to device " + Config.DEVICE_NAME;
 
-    private static final String SPACE = " ";
-    private static final String SAYING = "saying";
-    private static final String AGO = "ago";
-    private static final String COM_DOT = "com.";
-    private static final String HEADER = "You have a message ";
+    public static final String SPACE = " ";
+    public static final String SAYING = "saying";
+    public static final String AGO = "ago";
+    public static final String COM_DOT = "com.";
+    public static final String HEADER = "You have a message ";
     private String time;
     private String content;
     private String app = "from ";

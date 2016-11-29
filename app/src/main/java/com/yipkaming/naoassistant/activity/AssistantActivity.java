@@ -143,6 +143,12 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
 
                 SelectionHelper.getInstance().process(notificationMessage);
 
+                try {
+//                    nao.endVoiceRecognition();
+//                    nao.startVoiceRecognition();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 //                cancelNotification(this, false);
             }
         }
