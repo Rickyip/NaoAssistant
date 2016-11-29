@@ -82,8 +82,8 @@ public class ConnectionFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            instance = this;
             onConnectionListener.onConnected();
+            instance = this;
             KeyboardHelper.closeKeyboardFromFragment(getContext(), view);
 
 
