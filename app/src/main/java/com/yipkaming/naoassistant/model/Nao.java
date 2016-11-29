@@ -1,9 +1,13 @@
 package com.yipkaming.naoassistant.model;
 
+import android.util.Log;
+
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.Session;
+import com.aldebaran.qi.helper.EventCallback;
 import com.aldebaran.qi.helper.proxies.ALMemory;
+import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALSpeechRecognition;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 
@@ -16,6 +20,8 @@ import java.util.List;
 
 public class Nao {
 
+    private static final String TAG = Config.getSimpleName(Nao.class);
+
     public static final String PORT = "9559";
     public static final String CONNECTION_HEADER = "tcp://";
 
@@ -23,10 +29,13 @@ public class Nao {
     private static Nao instance;
 
     private String url;
+
     private Application app;
     private ALTextToSpeech alTextToSpeech;
     private ALSpeechRecognition alSpeechRecognition;
     private ALMemory alMemory;
+    private ALMotion alMotion;
+
     private boolean running = false;
 
     public boolean isRunning(){
@@ -85,6 +94,10 @@ public class Nao {
         if( alSpeechRecognition == null){
             alSpeechRecognition = new ALSpeechRecognition(getSession());
         }
+        if( alMemory == null){
+            alMemory = new ALMemory(getSession());
+        }
+
         List<String> vocab = new ArrayList<>();
         vocab.add("Nao");
         vocab.add("Yes");
@@ -93,6 +106,41 @@ public class Nao {
         alSpeechRecognition.setLanguage("English");
         alSpeechRecognition.setVocabulary(vocab, true);
         alSpeechRecognition.subscribe("Testing");
+
+
+        while(isRunning()){
+            alMemory.subscribeToEvent("WordRecognized", new EventCallback<List<String>>() {
+                @Override
+                public void onEvent(List<String> paramT) throws InterruptedException, CallError {
+                    String word = paramT.get(0);
+                    System.out.println("Word "+word);
+                    Log.e(TAG, "onWordRecognized: "+ word );
+                    if( alTextToSpeech == null){
+                        try {
+                            alTextToSpeech = new ALTextToSpeech(getSession());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if(word.equals("nao")) {
+                        alTextToSpeech.say("How can I help you?");
+                        alSpeechRecognition.pause(true);
+//            alMotion.wakeUp();
+                        alSpeechRecognition.pause(false);
+//            isAwake = true;
+                    }
+                    else if (word.equals("yes")) {
+                        alTextToSpeech.say("Good");
+//                    alMotion.moveToward(0.6f, 0f, 0f);
+                    }
+                    else if (word.equals("No")) {
+                        alTextToSpeech.say("OK");
+//                    alMotion.moveToward(0f, 0f, 0f);
+                    }
+                }
+            });
+            Thread.sleep(1000);
+        }
 
     }
 
@@ -103,6 +151,36 @@ public class Nao {
 
     public void endVoiceRecognition() throws InterruptedException, CallError {
         alSpeechRecognition.unsubscribe("Testing");
+    }
+
+    public void onWordRecognized(Object words) throws InterruptedException, CallError {
+        String word = (String) ((List<Object>)words).get(0);
+        System.out.println("Word "+word);
+        Log.e(TAG, "onWordRecognized: "+ word );
+        if(word.equals("nao")) {
+            alTextToSpeech.say("How can I help you?");
+            alSpeechRecognition.pause(true);
+//            alMotion.wakeUp();
+            alSpeechRecognition.pause(false);
+//            isAwake = true;
+        }
+        else if (word.equals("yes")) {
+            alTextToSpeech.say("Good");
+            alMotion.moveToward(0.6f, 0f, 0f);
+        }
+        else if (word.equals("No")) {
+            alTextToSpeech.say("OK");
+            alMotion.moveToward(0f, 0f, 0f);
+        }
+    }
+
+    public void onEnd(Float touch) throws Exception {
+        if (touch == 1.0) {
+            say("Application is stopping");
+//            motion.rest();
+            app.stop();
+            alSpeechRecognition.unsubscribe("demo");
+        }
     }
 
     public String getIpAddress(){
