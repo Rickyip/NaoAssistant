@@ -87,7 +87,7 @@ public class Nao {
             alTextToSpeech = new ALTextToSpeech(getSession());
         }
 
-//        alTextToSpeech.say(content);
+        alTextToSpeech.say(content);
     }
 
     public void startVoiceRecognition() throws Exception {
@@ -104,8 +104,8 @@ public class Nao {
         vocab.add("No");
 
         alSpeechRecognition.setLanguage("English");
-        alSpeechRecognition.setVocabulary(vocab, true);
-        alSpeechRecognition.subscribe("Testing");
+        alSpeechRecognition.setVocabulary(vocab, false);
+        alSpeechRecognition.subscribe("WordRecognized");
 
 
         while(isRunning()){
@@ -150,7 +150,7 @@ public class Nao {
     }
 
     public void endVoiceRecognition() throws InterruptedException, CallError {
-        alSpeechRecognition.unsubscribe("Testing");
+        alSpeechRecognition.unsubscribe("WordRecognized");
     }
 
     public void onWordRecognized(Object words) throws InterruptedException, CallError {
