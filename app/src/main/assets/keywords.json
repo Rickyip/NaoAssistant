@@ -1,0 +1,58 @@
+[
+  {
+    "id": 0,
+    "value": "com.google.calendar",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  },
+  {
+    "id": 1,
+    "value": "com.whatsapp",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"Communication",
+    "importance":3
+  },
+  {
+    "id": 2,
+    "value": "android",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"System",
+    "importance":2
+  },
+  {
+    "id": 3,
+    "value": "com.android.systemui",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"System",
+    "importance":1
+  },
+  {
+    "id": 4,
+    "value": "com.android",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"System",
+    "importance":1
+  },
+  {
+    "id": 5,
+    "value": "com.google.android.gm",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"Communication",
+    "importance":4
+  },
+  {
+    "id": 6,
+    "value": "com.google.android.calendar",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  }
+]
