@@ -175,7 +175,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                 result = String.format(getResources().getQuantityString(R.plurals.active_notification_count_nonzero, counts, counts));
             }
             result = result + "\n" + show();
-            messages.setText(result);
+//            messages.setText(result);
         }else {
             messages.setTextColor(Color.RED);
             messages.setText(R.string.PleaseEnableNotificationAccess);

@@ -18,6 +18,7 @@ public class SelectionHelper {
     private static final String TAG = Config.getSimpleName(SelectionHelper.class);
 
     private static SelectionHelper instance;
+    private static Nao nao = Nao.getInstance();
 
     private SelectionHelper(){}
 
@@ -60,7 +61,9 @@ public class SelectionHelper {
             VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
             try {
                 Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
-                Nao.getInstance().say(verbalReminder.getReminder());
+                if( nao != null && nao.isRunning()){
+                    nao.say(verbalReminder.getReminder());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
