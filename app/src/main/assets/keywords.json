@@ -54,5 +54,45 @@
     "wordCombination":"Single word",
     "category":"Schedule",
     "importance":5
+  },
+  {
+    "id": 7,
+    "value": "dinner",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  },
+  {
+    "id": 8,
+    "value": "lunch",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  },
+  {
+    "id": 9,
+    "value": "breakfast",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  },
+  {
+    "id": 10,
+    "value": "brunch",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  },
+  {
+    "id": 11,
+    "value": "meeting",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
   }
 ]

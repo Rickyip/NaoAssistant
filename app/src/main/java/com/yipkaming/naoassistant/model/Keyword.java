@@ -21,7 +21,7 @@ public class Keyword extends RealmObject {
     public static final String PACKAGE_NAME = "Package Name";
     public static final String COMMAND = "Command";
     public static final String QUESTION = "Question";
-    public static final String NOUN = "Normal noun";
+    public static final String NOUN = "Noun";
 
     //word combination
     public static final String SINGLE_WORD = "Single word";
