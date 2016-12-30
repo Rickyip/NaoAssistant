@@ -20,44 +20,57 @@ public class SelectionHelper {
     private static SelectionHelper instance;
     private static Nao nao = Nao.getInstance();
 
+    private static int importanceThreshold = 3;
+
     private SelectionHelper(){}
 
     public void process(NotificationMessage notificationMessage){
         int importance = 1;
-        boolean present = false;
-        if(Keyword.findKeyWord(notificationMessage.getPackageName())){
-            present = true;
-            importance = 3;
-        } else {
-            String[] titleFragments = notificationMessage.getTitle().split(VerbalReminder.SPACE);
-            String[] contentFragments = notificationMessage.getContent().split(VerbalReminder.SPACE);
-            int sizeOfTitleFragment = titleFragments.length;
-            int sizeOfContentFragment = contentFragments.length;
-            if(sizeOfTitleFragment != 0){
-                for(int i = 0; i < sizeOfTitleFragment; i++){
-                    Log.e(TAG, "process: " + titleFragments[i]);
-                    if(Keyword.findKeyWord(titleFragments[i])){
-                        present = true;
-                        importance = 4;
-                    }
-                }
-            }
-            if(sizeOfContentFragment != 0){
-                for(int i = 0; i < sizeOfContentFragment; i++){
-                    Log.e(TAG, "process: " + contentFragments[i]);
-                    if(Keyword.findKeyWord(contentFragments[i])){
-                        present = true;
-                        importance = 4;
-                    }
-                }
-            }
 
+        // Check if it is from important application
+        if(Keyword.hasKeyword(notificationMessage.getPackageName())){
+            Keyword packageName = Keyword.getKeywordFromString(notificationMessage.getPackageName());
+            importance = packageName.getImportance();
         }
+
+        // Check whether it has important keywords in title or content
+
+        String[] titleFragments = notificationMessage.getTitle().split(VerbalReminder.SPACE);
+        int sizeOfTitleFragment = titleFragments.length;
+
+        String[] contentFragments = notificationMessage.getContent().split(VerbalReminder.SPACE);
+        int sizeOfContentFragment = contentFragments.length;
+
+        if(sizeOfTitleFragment > 0){
+            for (String titleFragment : titleFragments) {
+                Log.e(TAG, "process: " + titleFragment);
+                if (Keyword.hasKeyword(titleFragment)) {
+                    Keyword title = Keyword.getKeywordFromString(titleFragment);
+                    if (importance < title.getImportance()) {
+                        importance = title.getImportance();
+                    }
+                }
+            }
+        }
+
+        if(sizeOfContentFragment != 0){
+            for (String contentFragment : contentFragments) {
+                Log.e(TAG, "process: " + contentFragment);
+                if (Keyword.hasKeyword(contentFragment)) {
+                    Keyword contentFrag = Keyword.getKeywordFromString(contentFragment);
+                    if (importance < contentFrag.getImportance()) {
+                        importance = contentFrag.getImportance();
+                    }
+                }
+            }
+        }
+
+
         Log.e(TAG, "process: "+ notificationMessage.getContent() + ": "+ importance );
         notificationMessage.setImportance(importance);
         notificationMessage.save();
 
-        if(true){
+        if(importance >= getImportanceThreshold()){
             VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
             try {
                 Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
@@ -81,5 +94,13 @@ public class SelectionHelper {
             instance = new SelectionHelper();
         }
         return instance;
+    }
+
+    public static int getImportanceThreshold() {
+        return importanceThreshold;
+    }
+
+    public static void setImportanceThreshold(int importanceThreshold) {
+        SelectionHelper.importanceThreshold = importanceThreshold;
     }
 }
