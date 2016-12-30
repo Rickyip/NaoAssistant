@@ -1,7 +1,9 @@
 package com.yipkaming.naoassistant.model;
 
+import com.yipkaming.naoassistant.NaoAssistant;
 
-import java.util.UUID;
+import java.io.IOException;
+import java.io.InputStream;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -28,7 +30,6 @@ public class Keyword extends RealmObject {
 
     @PrimaryKey
     private int id;
-//    private static List<Keyword> keywordList = new ArrayList<Keyword>();
     private String value;
     private String wordType;
     private String wordCombination;
@@ -49,28 +50,39 @@ public class Keyword extends RealmObject {
 
     public static void init(){
         Realm realm = Realm.getDefaultInstance();
-        int i = 0;
-        new Keyword(i++, "com.whatsapp", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 4).save(realm);
-        new Keyword(i++, "android", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 1).save(realm);
-        new Keyword(i++, "com.android.systemui", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 1).save(realm);
-        new Keyword(i++, "com.android.vending", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 1).save(realm);
-        new Keyword(i++, "com.google.android.gm", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 3).save(realm);
-        new Keyword(i++, "com.google.android.calendar", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 5).save(realm);
-        new Keyword(i++, "com.google.calendar", Keyword.PACKAGE_NAME, Keyword.SINGLE_WORD, "", 5).save(realm);
+        clearAll(realm);
 
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                try {
+                    InputStream inputStream = NaoAssistant.getContext().getAssets().open("keywords.json");
+                    realm.createOrUpdateAllFromJson(Keyword.class, inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public static RealmResults<Keyword> findAll(Realm realm) {
         return realm.where(Keyword.class).findAll().sort("id");
     }
 
-    public static boolean findKeyWord(String word) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Keyword> keywordRealmResults = realm.where(Keyword.class)
+    public static boolean hasKeyword(String word) {
+        RealmResults<Keyword> keywordRealmResults = Realm.getDefaultInstance()
+                .where(Keyword.class)
                 .equalTo("value", word)
                 .findAll()
                 .sort("id");
         return !keywordRealmResults.isEmpty();
+    }
+
+    public static Keyword getKeywordFromString(String word){
+        return Realm.getDefaultInstance()
+                .where(Keyword.class)
+                .equalTo("value", word)
+                .findFirst();
     }
 
     public void save(Realm realm) {
@@ -86,4 +98,27 @@ public class Keyword extends RealmObject {
         realm.commitTransaction();
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getImportance() {
+        return importance;
+    }
+
+    public void setImportance(int importance) {
+        this.importance = importance;
+    }
 }
