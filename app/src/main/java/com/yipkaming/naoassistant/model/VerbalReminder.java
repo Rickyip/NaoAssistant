@@ -14,6 +14,8 @@ public class VerbalReminder {
     public static final String SAYING = "saying";
     public static final String AGO = "ago";
     public static final String COM_DOT = "com.";
+    public static final String GMAIL = "Gmail";
+    public static final String GM = "gm";
     public static final String HEADER = "You have a message ";
     private String time;
     private String content;
@@ -31,6 +33,9 @@ public class VerbalReminder {
         String packageName = notificationMessage.getPackageName();
         if(packageName.contains(COM_DOT)){
             packageName = packageName.substring(4);
+            if(GM.equals(packageName)){
+                packageName = GMAIL;
+            }
         }
         this.app += packageName;
     }
