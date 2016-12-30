@@ -19,6 +19,7 @@ public class NotificationMessage extends RealmObject{
     private String tickerText;
     private String content;
     private String tag;
+    private boolean read;
     private int importance = 0;
 
     public NotificationMessage() {
