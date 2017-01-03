@@ -13,7 +13,6 @@ import com.yipkaming.naoassistant.model.VerbalReminder;
  */
 
 public class SelectionHelper {
-    // Singleton pattern
 
     private static final String TAG = Config.getSimpleName(SelectionHelper.class);
 
@@ -34,41 +33,23 @@ public class SelectionHelper {
         }
 
         // Check whether it has important keywords in title or content
+        // Get the highest importance of word to see if it is valuable to present
 
         String[] titleFragments = notificationMessage.getTitle().split(VerbalReminder.SPACE);
-        int sizeOfTitleFragment = titleFragments.length;
+        int titleImportance = getImportanceOfEachWords(titleFragments);
+        importance = (importance < titleImportance) ? titleImportance : importance;
 
         String[] contentFragments = notificationMessage.getContent().split(VerbalReminder.SPACE);
-        int sizeOfContentFragment = contentFragments.length;
+        int contentImportance = getImportanceOfEachWords(contentFragments);
+        importance = (importance < contentImportance) ? contentImportance : importance;
 
-        if(sizeOfTitleFragment > 0){
-            for (String titleFragment : titleFragments) {
-                Log.e(TAG, "process: " + titleFragment);
-                if (Keyword.hasKeyword(titleFragment)) {
-                    Keyword title = Keyword.getKeywordFromString(titleFragment);
-                    if (importance < title.getImportance()) {
-                        importance = title.getImportance();
-                    }
-                }
-            }
-        }
-
-        if(sizeOfContentFragment != 0){
-            for (String contentFragment : contentFragments) {
-                Log.e(TAG, "process: " + contentFragment);
-                if (Keyword.hasKeyword(contentFragment)) {
-                    Keyword contentFrag = Keyword.getKeywordFromString(contentFragment);
-                    if (importance < contentFrag.getImportance()) {
-                        importance = contentFrag.getImportance();
-                    }
-                }
-            }
-        }
-
+        // Set the importance into the notification and save to db
 
         Log.e(TAG, "process: "+ notificationMessage.getContent() + ": "+ importance );
         notificationMessage.setImportance(importance);
         notificationMessage.save();
+
+        // If the importance passes the threshold, it will be presented
 
         if(importance >= getImportanceThreshold()){
             VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
@@ -81,6 +62,7 @@ public class SelectionHelper {
                 e.printStackTrace();
             }
         }
+
         // 1. important application?
         // 2. if no, any keywords in content/ title?
         // 3. if 1 yes or 2 yes, pass to verbal message class
@@ -89,7 +71,51 @@ public class SelectionHelper {
         // 6. end
     }
 
+    private int getImportanceOfEachWords(String[] arrayOfWords) {
+        int importance = 1;
+        if(arrayOfWords.length != 0){
+            // single word
+            for (String word : arrayOfWords) {
+//                Log.e(TAG, "process: " + word);
+                if (Keyword.hasKeyword(word)) {
+                    Keyword contentFrag = Keyword.getKeywordFromString(word);
+                    if (importance < contentFrag.getImportance()) {
+                        importance = contentFrag.getImportance();
+                    }
+                }
+            }
+            // bigram
+            if(arrayOfWords.length > 1) {
+                for (int i = 0; i < arrayOfWords.length - 1; i++) {
+                    String bigram = arrayOfWords[i] + " " + arrayOfWords[i + 1];
+                    Log.e(TAG, "bigram: "+ bigram );
+                    if (Keyword.hasKeyword(bigram)) {
+                        Keyword contentFrag = Keyword.getKeywordFromString(bigram);
+                        if (importance < contentFrag.getImportance()) {
+                            importance = contentFrag.getImportance();
+                        }
+                    }
+                }
+            }
+            // trigram
+            if(arrayOfWords.length > 2) {
+                for (int i = 0; i < arrayOfWords.length - 2; i++) {
+                    String trigram = arrayOfWords[i] + " " + arrayOfWords[i + 1] + " " + arrayOfWords[i + 2];
+                    Log.e(TAG, "trigram: "+ trigram );
+                    if (Keyword.hasKeyword(trigram)) {
+                        Keyword contentFrag = Keyword.getKeywordFromString(trigram);
+                        if (importance < contentFrag.getImportance()) {
+                            importance = contentFrag.getImportance();
+                        }
+                    }
+                }
+            }
+        }
+        return importance;
+    }
+
     public static SelectionHelper getInstance(){
+        // Singleton pattern
         if(instance == null){
             instance = new SelectionHelper();
         }
