@@ -1,5 +1,8 @@
 package com.yipkaming.naoassistant.model;
 
+import android.database.Cursor;
+import android.provider.ContactsContract;
+
 import com.yipkaming.naoassistant.NaoAssistant;
 
 import java.io.IOException;
@@ -8,6 +11,7 @@ import java.io.InputStream;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -28,8 +32,16 @@ public class Keyword extends RealmObject {
     public static final String SINGLE_WORD = "Single word";
     public static final String BIGRAM = "Bigram";
     public static final String TRIGRAM = "Trigram";
+    public static final String ARRAY_OF_WORDS = "Array of words";
+
+    //word category
+    public static final String SYSTEM = "System";
+    public static final String SCHEDULE = "Schedule";
+    public static final String COMMUNICATION = "Communication";
+    public static final String CONTACT = "Contact";
 
     @PrimaryKey
+    @Index
     private int id;
     private String value;
     private String wordType;
@@ -53,6 +65,23 @@ public class Keyword extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         clearAll(realm);
 
+        readKeywordFromJson(realm);
+        readContactList(realm);
+    }
+
+    private static void readContactList(Realm realm) {
+        Cursor phones = NaoAssistant.getContext().getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        int contactIndex = 100000;
+        while (phones.moveToNext()) {
+            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            Keyword keyword = new Keyword(contactIndex++, name, NOUN, ARRAY_OF_WORDS, CONTACT, 5);
+            keyword.save(realm);
+        }
+        phones.close();
+    }
+
+    private static void readKeywordFromJson(Realm realm) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
