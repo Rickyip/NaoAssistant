@@ -94,5 +94,37 @@
     "wordCombination":"Single word",
     "category":"Schedule",
     "importance":5
+  },
+  {
+    "id": 12,
+    "value": "Missed call",
+    "wordType":"Reminder",
+    "wordCombination":"bigram",
+    "category":"Communication",
+    "importance":5
+  },
+  {
+    "id": 13,
+    "value": "Google Account alert",
+    "wordType":"Reminder",
+    "wordCombination":"trigram",
+    "category":"Communication",
+    "importance":2
+  },
+  {
+    "id": 14,
+    "value": "USB debugging connected",
+    "wordType":"Noun",
+    "wordCombination":"trigram",
+    "category":"System",
+    "importance":1
+  },
+  {
+    "id": 15,
+    "value": "Media device",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"System",
+    "importance":1
   }
 ]
