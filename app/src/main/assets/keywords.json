@@ -126,5 +126,45 @@
     "wordCombination":"bigram",
     "category":"System",
     "importance":1
+  },
+  {
+    "id": 16,
+    "value": "meeting with",
+    "wordType":"Reminder",
+    "wordCombination":"bigram",
+    "category":"Schedule",
+    "importance":1
+  },
+  {
+    "id": 17,
+    "value": "meeting at",
+    "wordType":"Reminder",
+    "wordCombination":"bigram",
+    "category":"Schedule",
+    "importance":1
+  },
+  {
+    "id": 18,
+    "value": "doctor",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":4
+  },
+  {
+    "id": 19,
+    "value": "clinic",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
+  },
+  {
+    "id": 20,
+    "value": "medicine",
+    "wordType":"Noun",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
   }
 ]

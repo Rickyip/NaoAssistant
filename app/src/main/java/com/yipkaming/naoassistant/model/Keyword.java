@@ -72,10 +72,12 @@ public class Keyword extends RealmObject {
     private static void readContactList(Realm realm) {
         Cursor phones = NaoAssistant.getContext().getContentResolver().query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        int contactIndex = 100000;
+        int contactIndex = 100000;   // Starting index from 100000 to be distinguished from the normal keywords
+        assert phones != null;
         while (phones.moveToNext()) {
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             Keyword keyword = new Keyword(contactIndex++, name, NOUN, ARRAY_OF_WORDS, CONTACT, 5);
+            // for communication purposes, the importance is set to be highest
             keyword.save(realm);
         }
         phones.close();
