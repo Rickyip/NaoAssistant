@@ -1,5 +1,12 @@
 package com.yipkaming.naoassistant.model;
 
+import android.app.Notification;
+import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
+
+import com.yipkaming.naoassistant.helper.SelectionHelper;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -11,6 +18,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class NotificationMessage extends RealmObject{
 
+    private static final String TAG = Config.getSimpleName(NotificationMessage.class);
+
     // this class can combine info from bundle.extra and notification
     @PrimaryKey
     private long time;
@@ -18,19 +27,19 @@ public class NotificationMessage extends RealmObject{
     private String packageName;
     private String tickerText;
     private String content;
-    private String tag;
+    private String extraContent;
     private boolean read;
     private int importance = 0;
 
     public NotificationMessage() {
     }
 
-    public NotificationMessage(String title, String packageName, String content, String tag, long time, String tickerText) {
+    public NotificationMessage(String title, String packageName, String content, String extraContent, long time, String tickerText) {
         this.title = title;
         this.packageName = packageName;
         this.tickerText = tickerText;
         this.content = content;
-        this.tag = tag;
+        this.extraContent = extraContent;
         this.time = time;
     }
 
@@ -39,16 +48,70 @@ public class NotificationMessage extends RealmObject{
     }
 
 
+    public static void clearAll(Realm realm) {
+        realm.beginTransaction();
+        realm.delete(NotificationMessage.class);
+        realm.commitTransaction();
+    }
+
+    public static void initMessages(StatusBarNotification statusBarNotification){
+
+        Bundle extra = statusBarNotification.getNotification().extras;
+        String androidText = "", title = "", multiline = "", ticker = "";
+        if( extra != null ){
+            if(extra.getCharSequence("android.text") != null){
+                androidText = extra.getCharSequence("android.text").toString();
+                Log.e(TAG, "android text "+ androidText );
+            }
+            if(extra.getCharSequence("android.title") != null){
+                title = extra.getCharSequence("android.title").toString();
+            }
+            if(extra.getCharSequence("android.textLines") != null){
+                multiline = extra.getCharSequence("android.textLines").length() +", "+ extra.getCharSequence("android.textLines");
+                Log.e(TAG, "show: multiline     "+multiline );
+            }
+        }
+
+        if(statusBarNotification.getNotification().tickerText != null){
+            ticker = statusBarNotification.getNotification().tickerText.toString();
+        }
+
+        // cannot solve multi line problem in API 18
+        // read one first and then dismiss
+        Object content, extra_text;
+        content =  extra.get(Notification.EXTRA_BIG_TEXT);
+        extra_text =  extra.get(Notification.EXTRA_TEXT);
+
+        String  contentText = "";
+        if(content != null){
+            contentText +=  content.toString();
+            Log.e(TAG, "show: content, "+content.toString());
+        }
+        if(extra_text != null){
+            contentText += extra_text.toString();
+            Log.e(TAG, "show: test "+extra_text.toString());
+        }
+
+
+        NotificationMessage notificationMessage = new NotificationMessage(
+                title
+                , statusBarNotification.getPackageName()
+                , androidText // content
+                , contentText // extra
+                , statusBarNotification.getPostTime()
+                , ticker ); // ticker text
+
+        Log.e(TAG, "ticker:  "+ ticker );
+        Log.e(TAG, "tag:  "+ statusBarNotification.getTag() );
+        notificationMessage.save();
+
+        SelectionHelper.getInstance().process(notificationMessage);
+    }
+
     public void save() {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(this);
-        realm.commitTransaction();
-    }
-
-    public static void clearAll(Realm realm) {
-        realm.beginTransaction();
-        realm.delete(NotificationMessage.class);
         realm.commitTransaction();
     }
 
@@ -80,6 +143,10 @@ public class NotificationMessage extends RealmObject{
         return content;
     }
 
+    public String getDetailContent() {
+        return content+VerbalReminder.SPACE+tickerText;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -92,12 +159,12 @@ public class NotificationMessage extends RealmObject{
         this.time = time;
     }
 
-    public String getTag() {
-        return tag;
+    public String getExtraContent() {
+        return extraContent;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setExtraContent(String extraContent) {
+        this.extraContent = extraContent;
     }
 
     public int getImportance() {
@@ -107,4 +174,5 @@ public class NotificationMessage extends RealmObject{
     public void setImportance(int importance) {
         this.importance = importance;
     }
+
 }

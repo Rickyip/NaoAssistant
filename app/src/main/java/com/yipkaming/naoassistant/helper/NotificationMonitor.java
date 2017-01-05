@@ -17,6 +17,7 @@ import android.util.Log;
 import com.yipkaming.naoassistant.NaoAssistant;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.NotificationMessage;
+import com.yipkaming.naoassistant.model.VerbalReminder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,39 +102,22 @@ public class NotificationMonitor extends NotificationListenerService {
         Log.i(TAG, "have " + currentNotificationsCounts + " active notifications");
         postedNotification = sbn;
 
+        NotificationMessage.initMessages(sbn);
 
-        Bundle extras = sbn.getNotification().extras;
-        String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
-        CharSequence notificationText = extras.getCharSequence(Notification.EXTRA_TEXT);
-        CharSequence notificationSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
-//        Log.i(TAG, "notificationTitle:"+notificationTitle);
-//        Log.i(TAG, "notificationText:"+notificationText);
-//        Log.i(TAG, "notificationSubText:"+notificationSubText);
-        String androidText = "", title = "", multiline = "";
-        if( extras != null ){
-            if(extras.getCharSequence("android.text") != null){
-                androidText = extras.getCharSequence("android.text").toString();
-            }
-            if(extras.getCharSequence("android.title") != null){
-                title = extras.getCharSequence("android.title").toString();
-            }
-            if(extras.getCharSequence("android.textLines") != null){
-                multiline = extras.getCharSequence("android.textLines").length() +", "+ extras.getCharSequence("android.textLines");
-                Log.e(TAG, "show: "+multiline );
-            }
-        }
-        NotificationMessage notificationMessage = new NotificationMessage(title
-                , sbn.getPackageName()
-                , androidText
-                , sbn.getTag()
-                , sbn.getPostTime()
-                , sbn.getNotification().tickerText.toString() );
-                notificationMessage.save();
+//        Bundle extras = sbn.getNotification().extras;
+//        String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
+//        CharSequence notificationText = extras.getCharSequence(Notification.EXTRA_TEXT);
+//        CharSequence notificationSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
+////        Log.i(TAG, "notificationTitle:"+notificationTitle);
+////        Log.i(TAG, "notificationText:"+notificationText);
+////        Log.i(TAG, "notificationSubText:"+notificationSubText);
 
-        SelectionHelper.getInstance().process(notificationMessage);
 
-//        NaoAssistant.getNotificationManager().cancel(sbn.getTag(), sbn.getId());
+
+//        NaoAssistant.getNotificationManager().cancel(sbn.getExtraContent(), sbn.getId());
     }
+
+
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {

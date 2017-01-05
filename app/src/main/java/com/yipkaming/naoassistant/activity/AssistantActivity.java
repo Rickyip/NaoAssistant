@@ -25,6 +25,8 @@ import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Keyword;
 import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
+import com.yipkaming.naoassistant.model.VerbalReminder;
+
 import io.realm.Realm;
 
 
@@ -97,51 +99,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         StatusBarNotification[] currentNos = NotificationMonitor.getCurrentNotifications();
         if (currentNos != null) {
             for (int i = 0; i < currentNos.length; i++) {
-                StatusBarNotification currentNo = currentNos[i];
-                Bundle extra = currentNo.getNotification().extras;
-                String androidText = "", title = "", multiline = "", ticker = "";
-                if( extra != null ){
-                    if(extra.getCharSequence("android.text") != null){
-                        androidText = extra.getCharSequence("android.text").toString();
-                    }
-                    if(extra.getCharSequence("android.title") != null){
-                        title = extra.getCharSequence("android.title").toString();
-                    }
-                    if(extra.getCharSequence("android.textLines") != null){
-                        multiline = extra.getCharSequence("android.textLines").length() +", "+ extra.getCharSequence("android.textLines");
-                        Log.e(TAG, "show: "+multiline );
-                    }
-                }
-
-                if(currentNo.getNotification().tickerText != null){
-                    ticker = currentNo.getNotification().tickerText.toString();
-                }
-                // cannot solve multi line problem in API 18
-                // read one first and then dismiss
-                Object content, test;
-                content =  extra.get(Notification.EXTRA_BIG_TEXT);
-                test =  extra.get(Notification.EXTRA_TEXT);
-
-                if(content != null){
-                    Log.e(TAG, "show: content, "+content.toString());
-                }
-                Log.e(TAG, "show: " );
-
-                if(test != null){
-                    Log.e(TAG, "show: test "+test.toString());
-                }
-
-
-                NotificationMessage notificationMessage = new NotificationMessage(title
-                        , currentNo.getPackageName()
-                        , androidText // content
-                        , currentNo.getTag() // tag
-                        , currentNo.getPostTime()
-                        , ticker ); // ticker text
-
-                notificationMessage.save();
-
-                SelectionHelper.getInstance().process(notificationMessage);
+                NotificationMessage.initMessages(currentNos[i]);
 
                 try {
 //                    nao.endVoiceRecognition();
