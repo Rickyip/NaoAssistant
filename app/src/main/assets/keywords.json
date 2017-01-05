@@ -166,5 +166,13 @@
     "wordCombination":"Single word",
     "category":"Schedule",
     "importance":5
+  },
+  {
+    "id": 21,
+    "value": "Activity logs",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"System",
+    "importance":1
   }
 ]
