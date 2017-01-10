@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,17 @@ public class ConnectionFragment extends Fragment {
         if(nao.isRunning()){
             setUIItems(nao.isRunning());
         }else {
+            ip.setOnKeyListener(new View.OnKeyListener() {
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key-down event on the "enter" button
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        makeConnection();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
             connect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
