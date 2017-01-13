@@ -52,6 +52,7 @@ public class ConnectionFragment extends Fragment {
         if(nao.isRunning()){
             setUIItems(nao.isRunning());
         }else {
+            ip.setSelection(ip.getText().length());
             ip.setOnKeyListener(new View.OnKeyListener() {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // If the event is a key-down event on the "enter" button
