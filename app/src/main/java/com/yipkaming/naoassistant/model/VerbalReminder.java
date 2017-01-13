@@ -8,7 +8,7 @@ import com.yipkaming.naoassistant.helper.DateHelper;
 
 public class VerbalReminder {
 
-    public static final String CONNECTION_GREETING = "Hi! I have connected to device " + Config.DEVICE_NAME;
+    public static final String CONNECTION_GREETING = "Hi! I have connected to device " + Config.getBluetoothName();
 
     public static final String SPACE = " ";
     public static final String SAYING = "saying";
