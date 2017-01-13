@@ -119,6 +119,11 @@ public class Nao {
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
         alSpeechRecognition.setParameter("Sensitivity", (float) 0.5);  // not effective
+        /*
+            Sensitivity: Value between 0 and 1 setting the sensitivity of the voice activity detector used by the engine.
+            NbHypotheses: Number of hypotheses returned by the engine. Default: 1
+            http://doc.aldebaran.com/2-1/naoqi/audio/alspeechrecognition-api.html#ALSpeechRecognitionProxy::setParameter__ssCR.floatCR
+         */
         alSpeechRecognition.subscribe(ASR_SUBSCRIBER);
 
         alMemory.subscribeToEvent(WORD_RECOGNIZED, "onWordRecognized::(m)", this);
