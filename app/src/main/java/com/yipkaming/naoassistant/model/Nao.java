@@ -24,13 +24,11 @@ public class Nao {
     public static final String PORT = "9559";
     public static final String CONNECTION_HEADER = "tcp://";
     private static final String ASR_SUBSCRIBER = "interaction";
+
     private static final String ENGLISH = "English";
     private static final String WORD_RECOGNIZED = "WordRecognized";
 
-
     private static Nao instance;
-
-    private String url;
 
     private Application app;
     private ALTextToSpeech alTextToSpeech;
@@ -38,6 +36,7 @@ public class Nao {
     private ALMemory alMemory;
     private ALMotion alMotion;
 
+    private String url;
     private boolean running = false;
 
     public boolean isRunning(){
@@ -96,7 +95,6 @@ public class Nao {
     }
 
     public void startVoiceRecognition() throws Exception {
-
         if( alSpeechRecognition == null){
             alSpeechRecognition = new ALSpeechRecognition(getSession());
         }
@@ -114,8 +112,6 @@ public class Nao {
         alSpeechRecognition.setVocabulary(vocab, false);
         alSpeechRecognition.setParameter("Sensitivity", (float) 0.5);  // not effective
         alSpeechRecognition.subscribe(ASR_SUBSCRIBER);
-
-
 
         alMemory.subscribeToEvent(WORD_RECOGNIZED, "onWordRecognized::(m)", this);
         alMemory.subscribeToEvent("MiddleTactilTouched", "onEnd::(f)", this);

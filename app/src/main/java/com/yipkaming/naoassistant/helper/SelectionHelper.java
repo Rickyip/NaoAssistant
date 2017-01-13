@@ -45,7 +45,7 @@ public class SelectionHelper {
 
         // Set the importance into the notification and save to db
 
-        Log.e(TAG, "process: "+ notificationMessage.getContent() + ": "+ importance );
+//        Log.e(TAG, "process: "+ notificationMessage.getContent() + ": "+ importance );
         notificationMessage.setImportance(importance);
         notificationMessage.save();
 
@@ -88,7 +88,7 @@ public class SelectionHelper {
             if(arrayOfWords.length > 1) {
                 for (int i = 0; i < arrayOfWords.length - 1; i++) {
                     String bigram = arrayOfWords[i] + " " + arrayOfWords[i + 1];
-                    Log.e(TAG, "bigram: "+ bigram );
+//                    Log.e(TAG, "bigram: "+ bigram );
                     if (Keyword.hasKeyword(bigram)) {
                         Keyword contentFrag = Keyword.getKeywordFromString(bigram);
                         if (importance < contentFrag.getImportance()) {
@@ -101,7 +101,7 @@ public class SelectionHelper {
             if(arrayOfWords.length > 2) {
                 for (int i = 0; i < arrayOfWords.length - 2; i++) {
                     String trigram = arrayOfWords[i] + " " + arrayOfWords[i + 1] + " " + arrayOfWords[i + 2];
-                    Log.e(TAG, "trigram: "+ trigram );
+//                    Log.e(TAG, "trigram: "+ trigram );
                     if (Keyword.hasKeyword(trigram)) {
                         Keyword contentFrag = Keyword.getKeywordFromString(trigram);
                         if (importance < contentFrag.getImportance()) {
