@@ -1,7 +1,6 @@
 package com.yipkaming.naoassistant.activity;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,12 +19,10 @@ import android.widget.TextView;
 import com.yipkaming.naoassistant.fragment.ConnectionFragment;
 import com.yipkaming.naoassistant.helper.NotificationMonitor;
 import com.yipkaming.naoassistant.R;
-import com.yipkaming.naoassistant.helper.SelectionHelper;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Keyword;
 import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
-import com.yipkaming.naoassistant.model.VerbalReminder;
 
 import io.realm.Realm;
 
@@ -37,9 +34,9 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
 
     private Realm realm = Realm.getDefaultInstance();
     private Nao nao;
+    private Thread asr;
 
     TextView messages;
-//    Button showList;
     MenuItem disconnectBtn;
 
     //    private NotificationManager manager;
@@ -49,14 +46,12 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assistant);
-
         initFragment();
 
         messages = (TextView) findViewById(R.id.messages);
-//        showList = (Button) findViewById(R.id.showList);
+
 //        manager = NaoAssistant.getNotificationManager();
 
-//        setupBtnListener();
     }
 
 
@@ -66,16 +61,6 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
                 .add(R.id.connectFragment, new ConnectionFragment())
                 .commit();
     }
-
-//    private void setupBtnListener() {
-//        showList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listCurrentNotification();
-//            }
-//        });
-//    }
-
 
     @Override
     protected void onResume() {
@@ -89,6 +74,25 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         }
     }
 
+    private void startVoiceService() {
+        asr = new Thread(){
+            @Override
+            public void run() {
+                nao = Nao.getInstance();
+                if(nao.isRunning()){
+                    try {
+                        nao.startVoiceRecognition();
+                        nao.wait();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        asr.start();
+
+    }
+
     private String show() {
         // todo: clear all data for testing purpose
         NotificationMessage.clearAll(realm);
@@ -98,28 +102,11 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         String listNos = "";
         StatusBarNotification[] currentNos = NotificationMonitor.getCurrentNotifications();
         if (currentNos != null) {
-            for (int i = 0; i < currentNos.length; i++) {
-                NotificationMessage.initMessages(currentNos[i]);
-
-                try {
-//                    nao.endVoiceRecognition();
-//                    nao.startVoiceRecognition();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-//                cancelNotification(this, false);
+            for (StatusBarNotification currentNo : currentNos) {
+                NotificationMessage.initMessages(currentNo);
             }
         }
-
-//        nao = Nao.getInstance();
-//        try {
-//            nao.startVoiceRecognition();
-//            nao.wait();
-//            nao.endVoiceRecognition();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
+        startVoiceService();
         return listNos;
     }
 
@@ -228,7 +215,6 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         nao.stop();
         ConnectionFragment.setInstance(null);
         finish();
-
     }
 
     @Override
@@ -241,4 +227,9 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         // forbid user to disconnect with nao
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        asr.interrupt();
+    }
 }
