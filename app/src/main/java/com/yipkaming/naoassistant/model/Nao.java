@@ -96,6 +96,7 @@ public class Nao {
     }
 
     public void startVoiceRecognition() throws Exception {
+
         if( alSpeechRecognition == null){
             alSpeechRecognition = new ALSpeechRecognition(getSession());
         }
@@ -106,12 +107,14 @@ public class Nao {
         List<String> vocab = new ArrayList<>();
         vocab.add("Nao");
         vocab.add("Yes");
-        vocab.add("Byebye");
+        vocab.add("Stop ASR");
         vocab.add("How are you?");
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
+        alSpeechRecognition.setParameter("Sensitivity", (float) 0.5);  // not effective
         alSpeechRecognition.subscribe(ASR_SUBSCRIBER);
+
 
 
         alMemory.subscribeToEvent(WORD_RECOGNIZED, "onWordRecognized::(m)", this);
@@ -135,7 +138,8 @@ public class Nao {
             case "How are you?":
                 say("I am fine, thank you");
                 break;
-            case "byebye":
+            case "Stop ASR":
+                say("Are you sure?");
                 endRecognitionService();
                 break;
             default:
@@ -157,10 +161,8 @@ public class Nao {
         try {
             alSpeechRecognition.unsubscribe(ASR_SUBSCRIBER);
             say("I am stopping speech recognition service. ");
-        } catch (CallError callError) {
+        } catch (CallError | InterruptedException callError) {
             callError.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
