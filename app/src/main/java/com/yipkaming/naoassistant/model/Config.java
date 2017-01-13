@@ -1,5 +1,8 @@
 package com.yipkaming.naoassistant.model;
 
+
+import android.bluetooth.BluetoothAdapter;
+
 /**
  * Created by Yip on 7/10/2016.
  */
@@ -19,5 +22,7 @@ public class Config {
     public static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     public static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
 
-
+    public static String getBluetoothName(){
+        return BluetoothAdapter.getDefaultAdapter().getName();
+    }
 }
