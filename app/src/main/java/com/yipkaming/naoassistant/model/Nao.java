@@ -91,7 +91,15 @@ public class Nao {
             alTextToSpeech = new ALTextToSpeech(getSession());
         }
 
+        if( alSpeechRecognition != null){
+            alSpeechRecognition.pause(true);
+        }
+
         alTextToSpeech.say(content);
+
+        if( alSpeechRecognition != null){
+            alSpeechRecognition.pause(false);
+        }
     }
 
     public void startVoiceRecognition() throws Exception {
@@ -123,23 +131,29 @@ public class Nao {
         String word = (String) ((List<Object>)words).get(0);
         Log.e(TAG, "onWordRecognized: "+ word );
 
+        if(alTextToSpeech == null){
+            alTextToSpeech = new ALTextToSpeech(getSession());
+        }
+
         alSpeechRecognition.pause(true);
         switch (word) {
             case "Nao":
-                say("How can I help you?");
+                alTextToSpeech.say("How can I help you?");
                 break;
             case "Yes":
-                say("Good");
+                alTextToSpeech.say("Good");
                 break;
             case "How are you?":
-                say("I am fine, thank you");
+                alTextToSpeech.say("I am fine, thank you");
                 break;
             case "Stop ASR":
-                say("Are you sure?");
+                alTextToSpeech.say("OK");
                 endRecognitionService();
                 break;
+            case "":
+                break;
             default:
-                say("Sorry I don't understand");
+                alTextToSpeech.say("Sorry I don't understand");
                 break;
         }
         alSpeechRecognition.pause(false);
@@ -156,7 +170,7 @@ public class Nao {
     private void endRecognitionService(){
         try {
             alSpeechRecognition.unsubscribe(ASR_SUBSCRIBER);
-            say("I am stopping speech recognition service. ");
+            alTextToSpeech.say("I am stopping speech recognition service. ");
         } catch (CallError | InterruptedException callError) {
             callError.printStackTrace();
         } catch (Exception e) {
