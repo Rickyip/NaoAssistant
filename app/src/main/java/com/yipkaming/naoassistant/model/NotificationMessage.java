@@ -10,6 +10,7 @@ import com.yipkaming.naoassistant.helper.SelectionHelper;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -45,6 +46,16 @@ public class NotificationMessage extends RealmObject{
 
     public static RealmResults<NotificationMessage> findAll(Realm realm) {
         return realm.where(NotificationMessage.class).findAll().sort("time");
+    }
+
+
+    public static RealmResults<NotificationMessage> findReadable(Realm realm, int threshold) {
+        return realm.where(NotificationMessage.class)
+                .beginGroup()
+                    .greaterThanOrEqualTo("importance", threshold)
+                    .equalTo("read", false)
+                .endGroup()
+                .findAllSorted("importance", Sort.DESCENDING);
     }
 
 

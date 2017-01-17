@@ -9,6 +9,7 @@ import com.aldebaran.qi.helper.proxies.ALMemory;
 import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALSpeechRecognition;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
+import com.yipkaming.naoassistant.helper.SelectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +115,7 @@ public class Nao {
         vocab.add("Nao");
         vocab.add("Yes");
         vocab.add("Stop ASR");
+        vocab.add("Read notifications");
         vocab.add("How are you?");
 
         alSpeechRecognition.setLanguage(ENGLISH);
@@ -150,6 +152,9 @@ public class Nao {
                 break;
             case "How are you?":
                 alTextToSpeech.say("I am fine, thank you");
+                break;
+            case "Read notifications":
+                SelectionHelper.read(this);
                 break;
             case "Stop ASR":
                 alTextToSpeech.say("OK");

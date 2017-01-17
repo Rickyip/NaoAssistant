@@ -8,6 +8,10 @@ import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
 import com.yipkaming.naoassistant.model.VerbalReminder;
 
+import java.util.List;
+
+import io.realm.Realm;
+
 /**
  * Created by Yip on 7/11/2016.
  */
@@ -56,7 +60,7 @@ public class SelectionHelper {
             try {
                 Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
                 if( nao != null && nao.isRunning()){
-                    nao.say(verbalReminder.getReminder());
+//                    nao.say(verbalReminder.getReminder());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -112,6 +116,18 @@ public class SelectionHelper {
             }
         }
         return importance;
+    }
+
+    public static void read(Nao nao){
+        List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), importanceThreshold);
+        for (NotificationMessage notification: aboutToRead) {
+            VerbalReminder reminder = new VerbalReminder(notification);
+            try {
+                nao.say(reminder.getReminder());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static SelectionHelper getInstance(){
