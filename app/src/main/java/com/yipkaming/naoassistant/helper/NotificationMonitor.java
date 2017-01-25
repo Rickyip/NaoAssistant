@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.yipkaming.naoassistant.NaoAssistant;
 import com.yipkaming.naoassistant.model.Config;
+import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
 import com.yipkaming.naoassistant.model.VerbalReminder;
 
@@ -103,6 +104,11 @@ public class NotificationMonitor extends NotificationListenerService {
         postedNotification = sbn;
 
         NotificationMessage.initMessages(sbn);
+        try {
+            Nao.getInstance().say(VerbalReminder.NEW_NOTIFICATION);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        Bundle extras = sbn.getNotification().extras;
 //        String notificationTitle = extras.getString(Notification.EXTRA_TITLE);

@@ -186,4 +186,15 @@ public class NotificationMessage extends RealmObject{
         this.importance = importance;
     }
 
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
+    public void setHasRead(){
+        setRead(true);
+    }
 }
