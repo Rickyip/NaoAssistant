@@ -55,17 +55,19 @@ public class SelectionHelper {
 
         // If the importance passes the threshold, it will be presented
 
-        if(importance >= getImportanceThreshold()){
-            VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
-            try {
-                Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
-                if( nao != null && nao.isRunning()){
+        // Change of flow
+
+//        if(importance >= getImportanceThreshold()){
+//            VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
+//            try {
+//                Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
+//                if( nao != null && nao.isRunning()){
 //                    nao.say(verbalReminder.getReminder());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         // 1. important application?
         // 2. if no, any keywords in content/ title?
@@ -120,12 +122,24 @@ public class SelectionHelper {
 
     public static void read(Nao nao){
         List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), importanceThreshold);
-        for (NotificationMessage notification: aboutToRead) {
-            VerbalReminder reminder = new VerbalReminder(notification);
+
+        if(aboutToRead.isEmpty()){
             try {
-                nao.say(reminder.getReminder());
+                nao.say(VerbalReminder.NO_NOTIFICATION);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+
+        }else {
+            for (NotificationMessage notification : aboutToRead) {
+                VerbalReminder reminder = new VerbalReminder(notification);
+                try {
+                    nao.say(reminder.getReminder());
+                    notification.setHasRead();
+                    notification.save();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

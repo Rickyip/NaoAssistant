@@ -113,7 +113,7 @@ public class Nao {
 
         List<String> vocab = new ArrayList<>();
         vocab.add("Nao");
-        vocab.add("Yes");
+        vocab.add("Yes please");
         vocab.add("Stop ASR");
         vocab.add("Read notifications");
         vocab.add("How are you?");
@@ -147,8 +147,8 @@ public class Nao {
             case "Nao":
                 alTextToSpeech.say("How can I help you?");
                 break;
-            case "Yes":
-                alTextToSpeech.say("Good");
+            case "Yes please":
+                SelectionHelper.read(this);
                 break;
             case "How are you?":
                 alTextToSpeech.say("I am fine, thank you");
@@ -198,6 +198,6 @@ public class Nao {
     }
 
     public void sayConnectionGreeting() throws Exception {
-        say(VerbalReminder.CONNECTION_GREETING);
+        say(VerbalReminder.CONNECTION_GREETING + VerbalReminder.INTRODUCTION);
     }
 }
