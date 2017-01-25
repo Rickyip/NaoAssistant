@@ -125,7 +125,10 @@ public class SelectionHelper {
 
         if(aboutToRead.isEmpty()){
             try {
-                nao.say(VerbalReminder.NO_NOTIFICATION);
+                if(nao.isRunning()){
+                    nao.say(VerbalReminder.NO_NOTIFICATION);
+                }
+                Log.e(TAG, "read: "+ VerbalReminder.NO_NOTIFICATION );
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -134,7 +137,10 @@ public class SelectionHelper {
             for (NotificationMessage notification : aboutToRead) {
                 VerbalReminder reminder = new VerbalReminder(notification);
                 try {
-                    nao.say(reminder.getReminder());
+                    if(nao.isRunning()){
+                        nao.say(reminder.getReminder());
+                    }
+                    Log.e(TAG, "read: "+reminder.getReminder() );
                     notification.setHasRead();
                     notification.save();
                 } catch (Exception e) {

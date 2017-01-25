@@ -105,7 +105,12 @@ public class NotificationMonitor extends NotificationListenerService {
 
         NotificationMessage.initMessages(sbn);
         try {
-            Nao.getInstance().say(VerbalReminder.NEW_NOTIFICATION);
+            Nao nao = Nao.getInstance();
+            if(nao.isRunning()){
+                nao.say(VerbalReminder.NEW_NOTIFICATION);
+            }else{
+                Log.e(TAG, "onNotificationPosted: " );
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
