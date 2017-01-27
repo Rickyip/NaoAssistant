@@ -32,8 +32,7 @@ public class NotificationMessage extends RealmObject{
     private boolean read;
     private int importance = 0;
 
-    public NotificationMessage() {
-    }
+    public NotificationMessage() {}
 
     public NotificationMessage(String title, String packageName, String content, String extraContent, long time, String tickerText) {
         this.title = title;
@@ -98,10 +97,11 @@ public class NotificationMessage extends RealmObject{
             contentText +=  content.toString();
             Log.e(TAG, "show: content, "+content.toString());
         }
-        if(extra_text != null){
-            contentText += extra_text.toString();
-            Log.e(TAG, "show: test "+extra_text.toString());
-        }
+//        if(extra_text != null){
+//            contentText += extra_text.toString();
+//            Log.e(TAG, "show: test "+extra_text.toString());
+//        }
+
 
 
         NotificationMessage notificationMessage = new NotificationMessage(
