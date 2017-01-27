@@ -24,7 +24,7 @@ public class VerbalReminder {
     public static final String MESSAGE = "message ";
     public static final String MISSED_CALL = "missed call ";
     public static final String SCHEDULE = "schedule ";
-    public static final String EMAIL = "email ";
+    public static final String EMAIL = "e-mail ";
     public static final String FROM = " from ";
     public static final String AT = " at ";
     public static final String SPACE = " ";
@@ -63,18 +63,7 @@ public class VerbalReminder {
         this.extraMsg = notificationMessage.getExtraContent();
         this.tickertext = notificationMessage.getTickerText();
         this.title = notificationMessage.getTitle();
-
-        String packageName = notificationMessage.getPackageName();
-//        if(packageName.contains(COM_DOT)){
-//            packageName = packageName.substring(4);
-//            if(GM.equals(packageName)){
-//                packageName = GMAIL;
-//            }
-//        }
-//        if(packageName.contains(GOOGLE_ANDROID_GM)){
-//            packageName = GMAIL;
-//        }
-        this.app += packageName;
+        this.app = notificationMessage.getPackageName();
     }
 
     public String getReminder() {
@@ -90,7 +79,7 @@ public class VerbalReminder {
                 person = content.substring(0, index );
                 time = content.substring(index);
             }
-            reminder = YOU_HAVE_A + MISSED_CALLS + FROM + person + AT + time
+            reminder = YOU_HAVE_A + MISSED_CALLS + FROM + person + AT + time;
             return reminder;
         }else if(CALENDER.equals(this.app)){  // case of calender schedule
             return YOU_HAVE_A + SCHEDULE + this.title + AT + this.content;
@@ -102,7 +91,7 @@ public class VerbalReminder {
                     wordCount = extraMsg.split("\\s+").length;
                 }
             }
-            
+
             reminder = YOU_HAVE_A;
             if(wordCount > 45){ // title is sender email / name
                 reminder += LONG + EMAIL + FROM + title + TITLED + this.content;
@@ -129,5 +118,32 @@ public class VerbalReminder {
     private String timeToDate(){
         return DateHelper.getDaysHoursMinutes(Long.valueOf(time));
     }
-
 }
+
+
+
+
+/*
+Cases design:
+Missed calls
+There are always two notification messages that the system can receive,
+which are one notification including the information of “Missed call from someone”
+or “n missed call” for each missed call and one notification having the time and number
+or contact name of the missed call.
+In order to consolidate the verbal messages for Nao to present about missed calls,
+this system will be presenting the notification which has contact name or number,
+considering the fact that having contact name in the notification should have a higher importance for the user.
+
+Calendar:
+For the calendar application, the format is different from other application:
+the title is the event of the schedule and the content is the scheduled time.
+Therefore, it requires its own way to form the verbal messages.
+
+Email:
+For the email application, the format is also different.
+The title is the sender’s email or name, the email title is stored in
+notification content and the email content is stored in extra content.
+Considering the length could be quite long for emails, if the content of
+the email has contained more than 45 words, the verbal reminder will not include the email content.
+
+ */
