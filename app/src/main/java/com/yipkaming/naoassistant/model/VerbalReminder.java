@@ -102,6 +102,7 @@ public class VerbalReminder {
                     wordCount = extraMsg.split("\\s+").length;
                 }
             }
+            
             reminder = YOU_HAVE_A;
             if(wordCount > 45){ // title is sender email / name
                 reminder += LONG + EMAIL + FROM + title + TITLED + this.content;
