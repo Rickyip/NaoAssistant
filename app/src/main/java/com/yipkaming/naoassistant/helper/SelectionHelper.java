@@ -53,10 +53,10 @@ public class SelectionHelper {
         notificationMessage.setImportance(importance);
         notificationMessage.save();
 
-        // If the importance passes the threshold, it will be presented
 
         // Change of flow
 
+        // If the importance passes the threshold, it will be presented
 //        if(importance >= getImportanceThreshold()){
 //            VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
 //            try {
@@ -151,8 +151,7 @@ public class SelectionHelper {
     }
 
     public static SelectionHelper getInstance(){
-        // Singleton pattern
-        if(instance == null){
+        if(instance == null){    // Singleton pattern
             instance = new SelectionHelper();
         }
         return instance;
