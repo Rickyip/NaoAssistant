@@ -174,5 +174,53 @@
     "wordCombination":"bigram",
     "category":"System",
     "importance":1
+  },
+  {
+    "id": 22,
+    "value": "Successfully installed",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"System",
+    "importance":1
+  },
+  {
+    "id": 23,
+    "value": "Missed calls",
+    "wordType":"Reminder",
+    "wordCombination":"bigram",
+    "category":"Communication",
+    "importance":5
+  },
+  {
+    "id": 24,
+    "value": "com.android.server.telecom",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"System",
+    "importance":5
+  },
+  {
+    "id": 25,
+    "value": "com.android.providers.downloads",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"System",
+    "importance":1
+  },
+  {
+    "id": 26,
+    "value": "com.android.vending",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"System",
+    "importance":1
+  },
+  {
+    "id": 27,
+    "value": "com.android.calendar",
+    "wordType":"Package Name",
+    "wordCombination":"Single word",
+    "category":"Schedule",
+    "importance":5
   }
 ]
