@@ -26,7 +26,6 @@ import com.yipkaming.naoassistant.model.NotificationMessage;
 
 import io.realm.Realm;
 
-
 public class AssistantActivity extends AppCompatActivity implements ConnectionFragment.OnConnectionListener{
 
     private static final String TAG = Config.getSimpleName(AssistantActivity.class);
@@ -90,7 +89,6 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
             }
         };
         asr.start();
-
     }
 
     private String show() {
