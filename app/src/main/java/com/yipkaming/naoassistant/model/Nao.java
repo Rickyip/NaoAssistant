@@ -10,6 +10,9 @@ import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALSpeechRecognition;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.yipkaming.naoassistant.helper.SelectionHelper;
+import com.yipkaming.naoassistant.strategy.ConfirmAction;
+import com.yipkaming.naoassistant.strategy.ReadNotification;
+import com.yipkaming.naoassistant.strategy.StopASR;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ public class Nao {
     private ALSpeechRecognition alSpeechRecognition;
     private ALMemory alMemory;
     private ALMotion alMotion;
+
+    private ConfirmAction confirmAction;
 
     private String url;
     private boolean running = false;
@@ -148,7 +153,8 @@ public class Nao {
                 alTextToSpeech.say("How can I help you?");
                 break;
             case "Yes please":
-                SelectionHelper.read(this);
+                confirmAction.confirm();
+//                SelectionHelper.read(this);
                 break;
             case "How are you?":
                 alTextToSpeech.say("I am fine, thank you");
@@ -157,8 +163,9 @@ public class Nao {
                 SelectionHelper.read(this);
                 break;
             case "Stop ASR":
-                alTextToSpeech.say("OK");
-                endRecognitionService();
+                alTextToSpeech.say("Do you mean to stop speech recognition service?");
+                confirmAction = new StopASR();
+//                endRecognitionService();
                 break;
             case "":
                 break;
@@ -177,7 +184,7 @@ public class Nao {
 
     }
 
-    private void endRecognitionService(){
+    public void endRecognitionService(){
         try {
             alSpeechRecognition.unsubscribe(ASR_SUBSCRIBER);
             alTextToSpeech.say("I am stopping speech recognition service. ");
@@ -199,5 +206,14 @@ public class Nao {
 
     public void sayConnectionGreeting() throws Exception {
         say(VerbalReminder.CONNECTION_GREETING + VerbalReminder.INTRODUCTION);
+        confirmAction = new ReadNotification();
+    }
+
+    public ConfirmAction getConfirmAction() {
+        return confirmAction;
+    }
+
+    public void setConfirmAction(ConfirmAction confirmAction) {
+        this.confirmAction = confirmAction;
     }
 }

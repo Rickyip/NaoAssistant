@@ -12,7 +12,8 @@ public class VerbalReminder {
     public static final String CONNECTION_GREETING = "Hi! I am Nao, I have connected to device " + Config.getBluetoothName();
     public static final String INTRODUCTION = "I am your assistant today, " +
             "You can tell me to read the messages for you by saying read notifications " +
-            "You can also stop this service by saying Stop ASR!";
+            "You can also stop this service by saying Stop ASR!" +
+            "Now Do you want me to read the notifications?";
 
     // Standard message words
     public static final String NO_NOTIFICATION = "You don't have new messages";
