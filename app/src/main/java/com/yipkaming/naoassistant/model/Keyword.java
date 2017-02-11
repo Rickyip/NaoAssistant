@@ -30,7 +30,7 @@ public class Keyword extends RealmObject {
     public static final String REMINDER = "Reminder";
 
     //word combination
-    public static final String SINGLE_WORD = "Single word";
+    public static final String UNIGRAM = "Unigram";
     public static final String BIGRAM = "Bigram";
     public static final String TRIGRAM = "Trigram";
     public static final String ARRAY_OF_WORDS = "Array of words";
