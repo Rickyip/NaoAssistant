@@ -17,6 +17,8 @@ import com.yipkaming.naoassistant.strategy.StopASR;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 /**
  * Created by Yip on 13/10/2016.
  */
@@ -153,7 +155,12 @@ public class Nao {
                 alTextToSpeech.say("How can I help you?");
                 break;
             case "Yes please":
-                confirmAction.confirm();
+                if(confirmAction != null){
+                    confirmAction.confirm();
+                    setConfirmAction(null);
+                }else {
+                    alTextToSpeech.say("Good");
+                }
 //                SelectionHelper.read(this);
                 break;
             case "How are you?":
@@ -206,7 +213,13 @@ public class Nao {
 
     public void sayConnectionGreeting() throws Exception {
         say(VerbalReminder.CONNECTION_GREETING + VerbalReminder.INTRODUCTION);
-        confirmAction = new ReadNotification();
+        List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), SelectionHelper.getImportanceThreshold());
+        if(aboutToRead.isEmpty()){
+            say(VerbalReminder.NO_NOTIFICATION);
+        }else {
+            say(VerbalReminder.getNotificationGreeting(aboutToRead.size()));
+            confirmAction = new ReadNotification();
+        }
     }
 
     public ConfirmAction getConfirmAction() {

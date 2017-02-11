@@ -1,6 +1,11 @@
 package com.yipkaming.naoassistant.model;
 
 import com.yipkaming.naoassistant.helper.DateHelper;
+import com.yipkaming.naoassistant.helper.SelectionHelper;
+
+import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Yip on 7/10/2016.
@@ -12,8 +17,8 @@ public class VerbalReminder {
     public static final String CONNECTION_GREETING = "Hi! I am Nao, I have connected to device " + Config.getBluetoothName();
     public static final String INTRODUCTION = "I am your assistant today, " +
             "You can tell me to read the messages for you by saying read notifications " +
-            "You can also stop this service by saying Stop ASR!" +
-            "Now Do you want me to read the notifications?";
+            "You can also stop this service by saying Stop ASR!";
+    public static final String READ_NOTIFICATION_GREETING = "Do you want me to read the it?";
 
     // Standard message words
     public static final String NO_NOTIFICATION = "You don't have new messages";
@@ -113,6 +118,11 @@ public class VerbalReminder {
         }
 
         return reminder;
+    }
+
+    public static String getNotificationGreeting(int num){
+        String greeting = "You have "+ num+ "notification";
+        return greeting+READ_NOTIFICATION_GREETING;
     }
 
 
