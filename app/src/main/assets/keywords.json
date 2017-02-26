@@ -222,5 +222,13 @@
     "wordCombination":"concat",
     "category":"Schedule",
     "importance":5
+  },
+  {
+    "id": 28,
+    "value": "Missed voice call",
+    "wordType":"Reminder",
+    "wordCombination":"trigram",
+    "category":"Communication",
+    "importance":5
   }
 ]
