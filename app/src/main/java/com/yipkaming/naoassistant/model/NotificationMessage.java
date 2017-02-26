@@ -194,7 +194,9 @@ public class NotificationMessage extends RealmObject{
         this.read = read;
     }
 
-    public void setHasRead(){
+    public void setHasRead(Realm realm){
+        realm.beginTransaction();
         setRead(true);
+        realm.commitTransaction();
     }
 }

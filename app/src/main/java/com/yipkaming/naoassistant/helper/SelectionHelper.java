@@ -141,7 +141,7 @@ public class SelectionHelper {
                         nao.say(reminder.getReminder());
                     }
                     Log.e(TAG, "read: "+reminder.getReminder() );
-                    notification.setHasRead();
+                    notification.setHasRead(Realm.getDefaultInstance());
                     notification.save();
                 } catch (Exception e) {
                     e.printStackTrace();
