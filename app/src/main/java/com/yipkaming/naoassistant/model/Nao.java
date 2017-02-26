@@ -46,6 +46,7 @@ public class Nao {
 
     private String url;
     private boolean running = false;
+    private boolean isInit = true;
 
     public boolean isRunning(){
         return running;
@@ -63,6 +64,7 @@ public class Nao {
             app = new Application(args);
             app.start();
             running = true;
+            isInit = true;
         }
         catch (Exception e){
             e.printStackTrace();
@@ -111,6 +113,7 @@ public class Nao {
     }
 
     public void startVoiceRecognition() throws Exception {
+        isInit = false;
         if( alSpeechRecognition == null){
             alSpeechRecognition = new ALSpeechRecognition(getSession());
         }
@@ -124,6 +127,7 @@ public class Nao {
         vocab.add("Stop ASR");
         vocab.add("Read notifications");
         vocab.add("How are you?");
+        vocab.add("Stop speech recognition service");
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
@@ -171,6 +175,10 @@ public class Nao {
                 break;
             case "Stop ASR":
                 alTextToSpeech.say("Do you mean to stop speech recognition service?");
+                confirmAction = new StopASR();
+//                endRecognitionService();
+                break;
+            case "Stop speech recognition service":
                 confirmAction = new StopASR();
 //                endRecognitionService();
                 break;
@@ -228,5 +236,13 @@ public class Nao {
 
     public void setConfirmAction(ConfirmAction confirmAction) {
         this.confirmAction = confirmAction;
+    }
+
+    public boolean isInit() {
+        return isInit;
+    }
+
+    public void setInit(boolean init) {
+        isInit = init;
     }
 }

@@ -1,5 +1,7 @@
 package com.yipkaming.naoassistant.model;
 
+import android.util.Log;
+
 import com.yipkaming.naoassistant.helper.DateHelper;
 import com.yipkaming.naoassistant.helper.SelectionHelper;
 
@@ -78,16 +80,19 @@ public class VerbalReminder {
 
     public String getReminder() {
         if(CALLS.equals(this.app)){  // case of missed calls
+            Log.e("getReminder: ", extraMsg.trim());
             if(tickertext != null && !"".equals(tickertext.trim()) && tickertext.contains(MISSED_CALLS)){
                 reminder =  "";
                 return reminder;
             }
 
             String person = "", time = "";
-            if(!"".equals(content) && content.contains(COLON)){
+            if(!"".equals(content) && content.contains(COLON)) {
                 int index = content.indexOf(COLON) - 2;
-                person = content.substring(0, index );
+                person = content.substring(0, index);
                 time = content.substring(index);
+            } else if ("".equals(content)){
+                return "";
             }
             reminder = YOU_HAVE_A + MISSED_CALLS + FROM + person + AT + time;
             return reminder;

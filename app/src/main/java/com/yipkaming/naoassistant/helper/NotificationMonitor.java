@@ -19,6 +19,7 @@ import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
 import com.yipkaming.naoassistant.model.VerbalReminder;
+import com.yipkaming.naoassistant.strategy.ReadNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +108,10 @@ public class NotificationMonitor extends NotificationListenerService {
         try {
             Nao nao = Nao.getInstance();
             if(nao.isRunning()){
-                nao.say(VerbalReminder.NEW_NOTIFICATION);
+                if(!nao.isInit()) {
+                    nao.say(VerbalReminder.NEW_NOTIFICATION);
+                }
+                nao.setConfirmAction(new ReadNotification());
             }else{
                 Log.e(TAG, "onNotificationPosted: " );
             }
