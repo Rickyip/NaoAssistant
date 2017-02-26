@@ -101,6 +101,10 @@ public class Nao {
             alTextToSpeech = new ALTextToSpeech(getSession());
         }
 
+        alTextToSpeech.setParameter("defaultVoiceSpeed", (float) 800.0);
+        alTextToSpeech.setParameter("pitchShift", (float) 1.15
+        );
+
         if( alSpeechRecognition != null){
             alSpeechRecognition.pause(true);
         }
@@ -127,7 +131,9 @@ public class Nao {
         vocab.add("Stop ASR");
         vocab.add("Read notifications");
         vocab.add("How are you?");
+        vocab.add("OK");
         vocab.add("Stop speech recognition service");
+        vocab.add("Any missed call");
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
@@ -153,12 +159,23 @@ public class Nao {
             alTextToSpeech = new ALTextToSpeech(getSession());
         }
 
+        alTextToSpeech.setParameter("speed", (float) 8000);
+
         alSpeechRecognition.pause(true);
         switch (word) {
             case "Nao":
                 alTextToSpeech.say("How can I help you?");
                 break;
             case "Yes please":
+                if(confirmAction != null){
+                    confirmAction.confirm();
+                    setConfirmAction(null);
+                }else {
+                    alTextToSpeech.say("Good");
+                }
+//                SelectionHelper.read(this);
+                break;
+            case "OK":
                 if(confirmAction != null){
                     confirmAction.confirm();
                     setConfirmAction(null);
@@ -179,8 +196,10 @@ public class Nao {
 //                endRecognitionService();
                 break;
             case "Stop speech recognition service":
-                confirmAction = new StopASR();
-//                endRecognitionService();
+                endRecognitionService();
+                break;
+            case "Any missed call":
+                SelectionHelper.findMissedCalls(this);
                 break;
             case "":
                 break;
