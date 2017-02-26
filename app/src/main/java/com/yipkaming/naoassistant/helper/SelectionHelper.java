@@ -21,7 +21,6 @@ public class SelectionHelper {
     private static final String TAG = Config.getSimpleName(SelectionHelper.class);
 
     private static SelectionHelper instance;
-    private static Nao nao = Nao.getInstance();
 
     private static int importanceThreshold = 3;
 
@@ -122,13 +121,22 @@ public class SelectionHelper {
 
     public static void read(Nao nao){
         List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), importanceThreshold);
+        readingNotification(aboutToRead, nao, VerbalReminder.NO_NOTIFICATION);
 
+    }
+
+    public static void findMissedCalls(Nao nao){
+        List<NotificationMessage> missedCalls = NotificationMessage.findMissedCalls(Realm.getDefaultInstance());   // cannot use the same default instance
+        readingNotification(missedCalls, nao, VerbalReminder.NO_MISSED_CALLS);
+    }
+
+    private static void readingNotification(List<NotificationMessage> aboutToRead, Nao nao, String msg){
         if(aboutToRead.isEmpty()){
             try {
                 if(nao.isRunning()){
-                    nao.say(VerbalReminder.NO_NOTIFICATION);
+                    nao.say(msg);
                 }
-                Log.e(TAG, "read: "+ VerbalReminder.NO_NOTIFICATION );
+                Log.e(TAG, "read: "+ msg );
             } catch (Exception e) {
                 e.printStackTrace();
             }

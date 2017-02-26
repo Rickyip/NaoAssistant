@@ -3,11 +3,7 @@ package com.yipkaming.naoassistant.model;
 import android.util.Log;
 
 import com.yipkaming.naoassistant.helper.DateHelper;
-import com.yipkaming.naoassistant.helper.SelectionHelper;
 
-import java.util.List;
-
-import io.realm.Realm;
 
 /**
  * Created by Yip on 7/10/2016.
@@ -26,6 +22,7 @@ public class VerbalReminder {
     public static final String NO_NOTIFICATION = "You don't have new messages";
     public static final String NEW_NOTIFICATION = "You have new messages, do you want me to read it?";
 
+    public static final String NO_MISSED_CALLS = "You don't have missed calls";
 
     public static final String SAYING = "saying";
     public static final String AGO = "ago";

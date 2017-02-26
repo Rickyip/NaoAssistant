@@ -51,9 +51,15 @@ public class NotificationMessage extends RealmObject{
     public static RealmResults<NotificationMessage> findReadable(Realm realm, int threshold) {
         return realm.where(NotificationMessage.class)
                 .beginGroup()
-                    .greaterThanOrEqualTo("importance", threshold)
-                    .equalTo("read", false)
+                .greaterThanOrEqualTo("importance", threshold)
+                .equalTo("read", false)
                 .endGroup()
+                .findAllSorted("importance", Sort.DESCENDING);
+    }
+
+    public static RealmResults<NotificationMessage> findMissedCalls(Realm realm) {
+        return realm.where(NotificationMessage.class)
+                .contains("tickerText", "Missed call")
                 .findAllSorted("importance", Sort.DESCENDING);
     }
 
