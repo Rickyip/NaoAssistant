@@ -19,6 +19,7 @@ import java.util.List;
 
 import io.realm.Realm;
 
+
 /**
  * Created by Yip on 13/10/2016.
  */
@@ -164,14 +165,14 @@ public class Nao {
         alSpeechRecognition.pause(true);
         switch (word) {
             case "Nao":
-                alTextToSpeech.say("How can I help you?");
+                alTextToSpeech.say(VerbalReminder.HOW_CAN_I_HELP_YOU);
                 break;
             case "Yes please":
                 if(confirmAction != null){
                     confirmAction.confirm();
                     setConfirmAction(null);
                 }else {
-                    alTextToSpeech.say("Good");
+                    alTextToSpeech.say(VerbalReminder.GOOD);
                 }
 //                SelectionHelper.read(this);
                 break;
@@ -180,12 +181,12 @@ public class Nao {
                     confirmAction.confirm();
                     setConfirmAction(null);
                 }else {
-                    alTextToSpeech.say("Good");
+                    alTextToSpeech.say(VerbalReminder.GOOD);
                 }
 //                SelectionHelper.read(this);
                 break;
             case "How are you?":
-                alTextToSpeech.say("I am fine, thank you");
+                alTextToSpeech.say(VerbalReminder.I_AM_FINE_THANKYOU);
                 break;
             case "Read notifications":
                 SelectionHelper.read(this);
@@ -204,7 +205,7 @@ public class Nao {
             case "":
                 break;
             default:
-                alTextToSpeech.say("Sorry I don't understand");
+                alTextToSpeech.say(VerbalReminder.SORRY_I_DONT_UNDERSTAND);
                 break;
         }
         alSpeechRecognition.pause(false);

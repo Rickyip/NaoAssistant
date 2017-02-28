@@ -51,6 +51,11 @@ public class VerbalReminder {
     public static final String MISSED_VOICE_CALL = "Missed voice call";
 
 
+    // Responses
+    public static final String GOOD = "Good";
+    public static final String I_AM_FINE_THANKYOU = "I am fine, thank you";
+    public static final String SORRY_I_DONT_UNDERSTAND = "Sorry I don't understand";
+    public static final String HOW_CAN_I_HELP_YOU = "How can I help you?";
 
     // Attributes
     private String time;
