@@ -48,6 +48,7 @@ public class Nao {
     private String url;
     private boolean running = false;
     private boolean isInit = true;
+    private List<String> names;
 
     public boolean isRunning(){
         return running;
@@ -126,15 +127,30 @@ public class Nao {
             alMemory = new ALMemory(getSession());
         }
 
+        names = new ArrayList<>();   // names used to setup user profile
+        names.add("Michael");   names.add("Linda");     names.add("Robert");    names.add("Patricia");
+        names.add("John");      names.add("Susan");     names.add("David");     names.add("Deborah");
+        names.add("William");   names.add("Barbara");   names.add("Richard");   names.add("Debra");
+        names.add("James");     names.add("Mary");      names.add("Thomas");    names.add("Karen");
+        names.add("Mark");      names.add("Nancy");     names.add("Charles");   names.add("Donna");
+        names.add("Steven");    names.add("Cynthia");   names.add("Gary");      names.add("Sandra");
+        names.add("Joseph");    names.add("Pamela");    names.add("Donald");    names.add("Sharon");
+        names.add("Ronald");    names.add("Kathleen");  names.add("Kenneth");   names.add("Carol");
+        names.add("Paul");      names.add("Diane");     names.add("Larry");     names.add("Brenda");
+        names.add("Daniel");    names.add("Cheryl");    names.add("Stephen");   names.add("Janet");
+        names.add("Dennis");    names.add("Elizabeth"); names.add("Timothy");   names.add("Kathy");
+        names.add("Edward");    names.add("Margaret");  names.add("Jeffrey");   names.add("Janice");
+        names.add("George");    names.add("Carolyn");   names.add("Rick");      names.add("Joanna");
+
+
         List<String> vocab = new ArrayList<>();
-        vocab.add("Nao");
-        vocab.add("Yes please");
-        vocab.add("Stop ASR");
-        vocab.add("Read notifications");
-        vocab.add("How are you?");
-        vocab.add("OK");
+        vocab.add("Nao");               vocab.add("Yes please");
+        vocab.add("Stop ASR");          vocab.add("Read notifications");
+        vocab.add("How are you?");      vocab.add("OK");
         vocab.add("Stop speech recognition service");
         vocab.add("Any missed call");
+        vocab.addAll(names);
+
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
@@ -163,50 +179,55 @@ public class Nao {
         alTextToSpeech.setParameter("speed", (float) 8000);
 
         alSpeechRecognition.pause(true);
-        switch (word) {
-            case "Nao":
-                alTextToSpeech.say(VerbalReminder.HOW_CAN_I_HELP_YOU);
-                break;
-            case "Yes please":
-                if(confirmAction != null){
-                    confirmAction.confirm();
-                    setConfirmAction(null);
-                }else {
-                    alTextToSpeech.say(VerbalReminder.GOOD);
-                }
+
+        if(names.contains(word)){
+            //do sth
+        }else {
+            switch (word) {
+                case "Nao":
+                    alTextToSpeech.say(VerbalReminder.HOW_CAN_I_HELP_YOU);
+                    break;
+                case "Yes please":
+                    if (confirmAction != null) {
+                        confirmAction.confirm();
+                        setConfirmAction(null);
+                    } else {
+                        alTextToSpeech.say(VerbalReminder.GOOD);
+                    }
 //                SelectionHelper.read(this);
-                break;
-            case "OK":
-                if(confirmAction != null){
-                    confirmAction.confirm();
-                    setConfirmAction(null);
-                }else {
-                    alTextToSpeech.say(VerbalReminder.GOOD);
-                }
+                    break;
+                case "OK":
+                    if (confirmAction != null) {
+                        confirmAction.confirm();
+                        setConfirmAction(null);
+                    } else {
+                        alTextToSpeech.say(VerbalReminder.GOOD);
+                    }
 //                SelectionHelper.read(this);
-                break;
-            case "How are you?":
-                alTextToSpeech.say(VerbalReminder.I_AM_FINE_THANKYOU);
-                break;
-            case "Read notifications":
-                SelectionHelper.read(this);
-                break;
-            case "Stop ASR":
-                alTextToSpeech.say("Do you mean to stop speech recognition service?");
-                confirmAction = new StopASR();
+                    break;
+                case "How are you?":
+                    alTextToSpeech.say(VerbalReminder.I_AM_FINE_THANKYOU);
+                    break;
+                case "Read notifications":
+                    SelectionHelper.read(this);
+                    break;
+                case "Stop ASR":
+                    alTextToSpeech.say("Do you mean to stop speech recognition service?");
+                    confirmAction = new StopASR();
 //                endRecognitionService();
-                break;
-            case "Stop speech recognition service":
-                endRecognitionService();
-                break;
-            case "Any missed call":
-                SelectionHelper.findMissedCalls(this);
-                break;
-            case "":
-                break;
-            default:
-                alTextToSpeech.say(VerbalReminder.SORRY_I_DONT_UNDERSTAND);
-                break;
+                    break;
+                case "Stop speech recognition service":
+                    endRecognitionService();
+                    break;
+                case "Any missed call":
+                    SelectionHelper.findMissedCalls(this);
+                    break;
+                case "":
+                    break;
+                default:
+                    alTextToSpeech.say(VerbalReminder.SORRY_I_DONT_UNDERSTAND);
+                    break;
+            }
         }
         alSpeechRecognition.pause(false);
     }
