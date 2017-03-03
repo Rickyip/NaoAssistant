@@ -230,5 +230,517 @@
     "wordCombination":"trigram",
     "category":"Communication",
     "importance":5
+  },
+  {
+    "id": 29,
+    "value": "Hong Kong",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Other",
+    "importance":3
+  },
+  {
+    "id": 30,
+    "value": "HK",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Other",
+    "importance":3
+  },
+  {
+    "id": 31,
+    "value": "com.android.incallui",
+    "wordType":"Package Name",
+    "wordCombination":"concat",
+    "category":"System",
+    "importance":5
+  },
+  {
+    "id": 32,
+    "value": "arthritis",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 33,
+    "value": "heart disease",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 34,
+    "value": "chronic condition",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 35,
+    "value": "high cholesterol",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 36,
+    "value": "blood pressure",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 37,
+    "value": "stroke",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 38,
+    "value": "health",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 39,
+    "value": "health risk",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 40,
+    "value": "rest",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 41,
+    "value": "exercise",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 42,
+    "value": "exercises",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 43,
+    "value": "diet",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 44,
+    "value": "treatment",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":5
+  },
+  {
+    "id": 45,
+    "value": "respiratory diseases",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 46,
+    "value": "chronic obstructive pulmonary disease",
+    "wordType":"Noun",
+    "wordCombination":"Array of words",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 47,
+    "value": "asthma",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 48,
+    "value": "emphysema",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 49,
+    "value": "chronic bronchitis",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 50,
+    "value": "pneumonia",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 51,
+    "value": "infections",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 52,
+    "value": "lung",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 53,
+    "value": "heart",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 54,
+    "value": "body",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 55,
+    "value": "brain",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 56,
+    "value": "Alzheimer’s Disease",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 57,
+    "value": "Osteoporosis",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 58,
+    "value": "bones",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 59,
+    "value": "diabetes",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 60,
+    "value": "blood",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 61,
+    "value": "blood sugar",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 62,
+    "value": "flu",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 63,
+    "value": "influenza",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 64,
+    "value": "pneumonia",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 65,
+    "value": "fall",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 66,
+    "value": "substance",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 67,
+    "value": "alcohol",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 68,
+    "value": "obesity",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 69,
+    "value": "depression",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 70,
+    "value": "immunity",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 71,
+    "value": "medication",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 72,
+    "value": "therapy",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 73,
+    "value": "oral health",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 74,
+    "value": "teeth",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 75,
+    "value": "dental",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 76,
+    "value": "shingles",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 77,
+    "value": "skin",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 78,
+    "value": "pain",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 79,
+    "value": "cognitive health",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 80,
+    "value": "dementia",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 81,
+    "value": "hypertension",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 82,
+    "value": "HIV",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 83,
+    "value": "mental health",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 84,
+    "value": "physical injury",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 85,
+    "value": "muscle",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 86,
+    "value": "malnutrition",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 87,
+    "value": "immune system",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 88,
+    "value": "impairment",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 89,
+    "value": "bladder control",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 90,
+    "value": "constipation",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 91,
+    "value": "incontinence",
+    "wordType":"Noun",
+    "wordCombination":"unigram",
+    "category":"Health",
+    "importance":4
+  },
+  {
+    "id": 92,
+    "value": "side effect",
+    "wordType":"Noun",
+    "wordCombination":"bigram",
+    "category":"Health",
+    "importance":4
   }
 ]
