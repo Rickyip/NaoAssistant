@@ -43,12 +43,14 @@ public class Nao {
     private ALMemory alMemory;
     private ALMotion alMotion;
 
+
     private ConfirmAction confirmAction;
 
     private String url;
     private boolean running = false;
     private boolean isInit = true;
     private List<String> names;
+    private float volumeLevel = (float) 0.5;   // set default value to be 50%
 
     public boolean isRunning(){
         return running;
@@ -100,12 +102,9 @@ public class Nao {
 
     public void say(String content) throws Exception {
         if( alTextToSpeech == null){
-            alTextToSpeech = new ALTextToSpeech(getSession());
+            ttsInit();
         }
 
-        alTextToSpeech.setParameter("defaultVoiceSpeed", (float) 800.0);
-        alTextToSpeech.setParameter("pitchShift", (float) 1.15
-        );
 
         if( alSpeechRecognition != null){
             alSpeechRecognition.pause(true);
@@ -127,34 +126,20 @@ public class Nao {
             alMemory = new ALMemory(getSession());
         }
 
-        names = new ArrayList<>();   // names used to setup user profile
-        names.add("Michael");   names.add("Linda");     names.add("Robert");    names.add("Patricia");
-        names.add("John");      names.add("Susan");     names.add("David");     names.add("Deborah");
-        names.add("William");   names.add("Barbara");   names.add("Richard");   names.add("Debra");
-        names.add("James");     names.add("Mary");      names.add("Thomas");    names.add("Karen");
-        names.add("Mark");      names.add("Nancy");     names.add("Charles");   names.add("Donna");
-        names.add("Steven");    names.add("Cynthia");   names.add("Gary");      names.add("Sandra");
-        names.add("Joseph");    names.add("Pamela");    names.add("Donald");    names.add("Sharon");
-        names.add("Ronald");    names.add("Kathleen");  names.add("Kenneth");   names.add("Carol");
-        names.add("Paul");      names.add("Diane");     names.add("Larry");     names.add("Brenda");
-        names.add("Daniel");    names.add("Cheryl");    names.add("Stephen");   names.add("Janet");
-        names.add("Dennis");    names.add("Elizabeth"); names.add("Timothy");   names.add("Kathy");
-        names.add("Edward");    names.add("Margaret");  names.add("Jeffrey");   names.add("Janice");
-        names.add("George");    names.add("Carolyn");   names.add("Rick");      names.add("Joanna");
-
+        initNameList();
 
         List<String> vocab = new ArrayList<>();
         vocab.add("Nao");               vocab.add("Yes please");
         vocab.add("Stop ASR");          vocab.add("Read notifications");
         vocab.add("How are you?");      vocab.add("OK");
-        vocab.add("Stop speech recognition service");
-        vocab.add("Any missed call");
+        vocab.add("Any missed call");   vocab.add("Stop speech recognition service");
+        vocab.add("Setup profile");     vocab.add("Create reminder");
         vocab.addAll(names);
 
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
-        alSpeechRecognition.setParameter("Sensitivity", (float) 0.5);  // not effective
+        alSpeechRecognition.setParameter("Sensitivity", (float) 0.2);  // not effective
         /*
             Sensitivity: Value between 0 and 1 setting the sensitivity of the voice activity detector used by the engine.
             NbHypotheses: Number of hypotheses returned by the engine. Default: 1
@@ -173,15 +158,33 @@ public class Nao {
         Log.e(TAG, "onWordRecognized: "+ word );
 
         if(alTextToSpeech == null){
-            alTextToSpeech = new ALTextToSpeech(getSession());
+            ttsInit();
         }
 
-        alTextToSpeech.setParameter("speed", (float) 8000);
 
         alSpeechRecognition.pause(true);
 
         if(names.contains(word)){
-            //do sth
+            if(User.getInstance() == null){
+                String name = word;
+                if(word.contains(VerbalReminder.YOU_CAN_CALL_ME)){
+                    name = name.replace(VerbalReminder.YOU_CAN_CALL_ME, "");
+                }else if (word.contains(VerbalReminder.CALL_ME)){
+                    name = name.replace(VerbalReminder.CALL_ME, "");
+                }
+
+                String gender = names.indexOf(name) % 2 == 0 ? User.GENDERS[0] : User.GENDERS[1];
+
+                Log.e(TAG, "name: " +name +", "+ gender);
+                User user = new User();
+                user.setName(name);
+                user.setGender(gender);
+                user.setCity("Hong Kong");
+                // health? sport? news? econ? weather?
+            }else{
+                // case of setting family member
+            }
+
         }else {
             switch (word) {
                 case "Nao":
@@ -221,6 +224,10 @@ public class Nao {
                     break;
                 case "Any missed call":
                     SelectionHelper.findMissedCalls(this);
+                    break;
+                case "Setup profile":
+                    alTextToSpeech.say(VerbalReminder.HOW_SHOULD_I_CALL_YOU);
+                    User.setInstance(null);
                     break;
                 case "":
                     break;
@@ -271,6 +278,40 @@ public class Nao {
         }
     }
 
+    private void ttsInit() throws Exception {
+        alTextToSpeech = new ALTextToSpeech(getSession());
+        alTextToSpeech.setParameter("defaultVoiceSpeed", (float) 800.0);
+        alTextToSpeech.setParameter("pitchShift", (float) 1.15);
+        alTextToSpeech.setVolume(volumeLevel); // 1.0 = set volume to 100%
+    }
+
+    private void initNameList(){
+        names = new ArrayList<>();   // names used to setup user profile
+        names.add("Michael");   names.add("Linda");     names.add("Robert");    names.add("Patricia");
+//        names.add("John");      names.add("Susan");     names.add("David");     names.add("Deborah");
+//        names.add("William");   names.add("Barbara");   names.add("Richard");   names.add("Debra");
+        names.add("James");     names.add("Mary");      names.add("Thomas");    names.add("Karen");
+//        names.add("Mark");      names.add("Nancy");     names.add("Charles");   names.add("Donna");
+//        names.add("Steven");    names.add("Cynthia");   names.add("Gary");      names.add("Sandra");
+//        names.add("Joseph");    names.add("Pamela");    names.add("Donald");    names.add("Sharon");
+//        names.add("Ronald");    names.add("Kathleen");  names.add("Kenneth");   names.add("Carol");
+//        names.add("Paul");      names.add("Diane");     names.add("Larry");     names.add("Brenda");
+//        names.add("Daniel");    names.add("Cheryl");    names.add("Stephen");   names.add("Janet");
+//        names.add("Dennis");    names.add("Elizabeth"); names.add("Timothy");   names.add("Kathy");
+//        names.add("Edward");    names.add("Margaret");  names.add("Jeffrey");   names.add("Janice");
+        names.add("George");    names.add("Carolyn");   names.add("Rick");      names.add("Joanna");
+        names.add("Cyrus");     names.add("Cat");
+
+        List<String> nameList2 = new ArrayList<>();
+        List<String> nameList3 = new ArrayList<>();
+        for(String name : names){
+            nameList2.add(VerbalReminder.YOU_CAN_CALL_ME+name);
+            nameList3.add(VerbalReminder.CALL_ME+name);
+        }
+        names.addAll(nameList2);
+        names.addAll(nameList3);
+    }
+
     public ConfirmAction getConfirmAction() {
         return confirmAction;
     }
@@ -285,5 +326,13 @@ public class Nao {
 
     public void setInit(boolean init) {
         isInit = init;
+    }
+
+    public float getVolumeLevel() {
+        return volumeLevel;
+    }
+
+    public void setVolumeLevel(float volumeLevel) {
+        this.volumeLevel = volumeLevel;
     }
 }
