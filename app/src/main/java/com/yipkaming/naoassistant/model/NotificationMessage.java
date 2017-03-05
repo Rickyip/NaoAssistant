@@ -48,6 +48,20 @@ public class NotificationMessage extends RealmObject{
     }
 
 
+    public static RealmResults<NotificationMessage> findByName(Realm realm, String name) {
+        return realm.where(NotificationMessage.class)
+                .beginGroup()
+                .contains("title", name)
+                .or()
+                .contains("tickerText", name)
+                .or()
+                .contains("content", name)
+                .or()
+                .contains("extraContent", name)
+                .endGroup()
+                .equalTo("read", false)
+                .findAllSorted("importance", Sort.DESCENDING);
+    }
     public static RealmResults<NotificationMessage> findReadable(Realm realm, int threshold) {
         return realm.where(NotificationMessage.class)
                 .beginGroup()

@@ -50,6 +50,7 @@ public class Nao {
     private boolean running = false;
     private boolean isInit = true;
     private List<String> names;
+    private List<String> relativesAndFriends;
     private float volumeLevel = (float) 0.5;   // set default value to be 50%
 
     public boolean isRunning(){
@@ -127,6 +128,7 @@ public class Nao {
         }
 
         initNameList();
+        initRelativesList();
 
         List<String> vocab = new ArrayList<>();
         vocab.add("Nao");               vocab.add("Yes please");
@@ -135,7 +137,7 @@ public class Nao {
         vocab.add("Any missed call");   vocab.add("Stop speech recognition service");
         vocab.add("Setup profile");     vocab.add("Create reminder");
         vocab.addAll(names);
-
+        vocab.addAll(relativesAndFriends);
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
@@ -152,7 +154,6 @@ public class Nao {
         app.run();
     }
 
-
     public void onWordRecognized(Object words) throws Exception {
         String word = (String) ((List<Object>)words).get(0);
         Log.e(TAG, "onWordRecognized: "+ word );
@@ -163,8 +164,21 @@ public class Nao {
 
 
         alSpeechRecognition.pause(true);
-
-        if(names.contains(word)){
+        String did = VerbalReminder.DID;
+        String find_me = VerbalReminder.FIND_ME;
+        String amf = VerbalReminder.ANY_MESSAGES_FROM;
+        if(!"".equals(word) && (word.contains(did) || word.contains(find_me) || word.contains(amf))){
+            Log.e(TAG, "relativesAndFriends" );
+            String name = word;
+            if(word.contains(did) && word.contains(find_me)){
+                name = name.replace(did, "");
+                name = name.replace(find_me, "");
+            }else if (word.contains(amf)){
+                name = name.replace(amf, "");
+            }
+            name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+            SelectionHelper.getInstance().readingNotification(NotificationMessage.findByName(Realm.getDefaultInstance(), name), getInstance(), VerbalReminder.NOTHING_FROM+name);
+        }else if(names.contains(word)){
             if(User.getInstance() == null){
                 String name = word;
                 if(word.contains(VerbalReminder.YOU_CAN_CALL_ME)){
@@ -316,12 +330,56 @@ public class Nao {
 
         List<String> nameList2 = new ArrayList<>();
         List<String> nameList3 = new ArrayList<>();
+        String you_can_call_me = VerbalReminder.YOU_CAN_CALL_ME;
+        String call_me = VerbalReminder.CALL_ME;
         for(String name : names){
-            nameList2.add(VerbalReminder.YOU_CAN_CALL_ME+name);
-            nameList3.add(VerbalReminder.CALL_ME+name);
+            nameList2.add(you_can_call_me+name);
+            nameList3.add(call_me+name);
         }
         names.addAll(nameList2);
         names.addAll(nameList3);
+    }
+
+    private void initRelativesList() {
+        relativesAndFriends = new ArrayList<>();
+//        List<String> relativeList = VerbalReminder.getRelativeList();
+//        relativesAndFriends.addAll(relativeList);
+        relativesAndFriends.add("Son");
+        relativesAndFriends.add("Daughter");
+        relativesAndFriends.add("Sister");
+        relativesAndFriends.add("Brother");
+        relativesAndFriends.add("Grandson");
+        relativesAndFriends.add("Granddaughter");
+        relativesAndFriends.add("Niece");
+        relativesAndFriends.add("Nephew");
+        relativesAndFriends.add("Husband");
+        relativesAndFriends.add("Wife");
+
+        List<String> list2 = new ArrayList<>();
+        List<String> list3 = new ArrayList<>();
+        String any_msg_from = VerbalReminder.ANY_MESSAGES_FROM;
+        String did = VerbalReminder.DID;
+        String find_me = VerbalReminder.FIND_ME;
+
+        for(String relative : relativesAndFriends){
+            relative = relative.toLowerCase();
+            list2.add(any_msg_from+relative);
+            list3.add(did+relative+find_me);
+        }
+
+        List<String> list4 = new ArrayList<>();
+        List<String> list5 = new ArrayList<>();
+
+        for(String name: Keyword.contacts){
+            name = name.toLowerCase();
+            list4.add(any_msg_from+name);
+            list5.add(did+name+find_me);
+        }
+
+        relativesAndFriends.addAll(list2);
+        relativesAndFriends.addAll(list3);
+        relativesAndFriends.addAll(list4);
+        relativesAndFriends.addAll(list5);
     }
 
     public ConfirmAction getConfirmAction() {

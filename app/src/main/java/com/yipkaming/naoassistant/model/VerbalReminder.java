@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.yipkaming.naoassistant.helper.DateHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by Yip on 7/10/2016.
@@ -24,6 +27,23 @@ public class VerbalReminder {
     public static final String HOW_SHOULD_I_CALL_YOU = "So how shall I call you, master?";
     public static final String YOU_CAN_CALL_ME = "You can call me ";
     public static final String CALL_ME = "Call me ";
+
+    // Relatives
+    public static final String SON = "Son";
+    public static final String DAUGHTER = "Daughter";
+    public static final String SISTER = "Sister";
+    public static final String BROTHER = "Brother";
+    public static final String GRANDSON = "Grandson";
+    public static final String GRANDDAUGHTR = "Granddaughter";
+    public static final String NIECE = "Niece";
+    public static final String NEPHEW = "Nephew";
+    public static final String HUSBAND = "Husband";
+    public static final String WIFE = "Wife";
+    public static final String DID = "Did ";
+    public static final String FIND_ME = " find me?";
+    public static final String ANY_MESSAGES_FROM = "Any messages from ";
+    public static final String NOTHING_FROM = "You have no messages from ";
+
 
     // Standard message words
     public static final String NO_NOTIFICATION = "You don't have new messages";
@@ -150,6 +170,21 @@ public class VerbalReminder {
 
     private String timeToDate(){
         return DateHelper.getDaysHoursMinutes(Long.valueOf(time));
+    }
+
+    public static List<String> getRelativeList(){
+        List<String> reletives = new ArrayList<>();
+        reletives.add(SON);
+        reletives.add(DAUGHTER);
+        reletives.add(SISTER);
+        reletives.add(BROTHER);
+        reletives.add(GRANDSON);
+        reletives.add(GRANDDAUGHTR);
+        reletives.add(NIECE);
+        reletives.add(NEPHEW);
+        reletives.add(HUSBAND);
+        reletives.add(WIFE);
+        return reletives;
     }
 }
 

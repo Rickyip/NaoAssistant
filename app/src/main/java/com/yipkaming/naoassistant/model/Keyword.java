@@ -8,6 +8,8 @@ import com.yipkaming.naoassistant.NaoAssistant;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -52,6 +54,8 @@ public class Keyword extends RealmObject {
     private String category;
     private int importance; // 5 is highest 1 is lowest
 
+    public static List<String> contacts;
+
     public Keyword() {
     }
 
@@ -77,8 +81,10 @@ public class Keyword extends RealmObject {
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         int contactIndex = 100000;   // Starting index from 100000 to be distinguished from the normal keywords
         assert phones != null;
+        contacts = new ArrayList<>();
         while (phones.moveToNext()) {
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            contacts.add(name);
             String details = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             Log.i("readContactList: ", name+" ,"+details);
             Keyword keyword = new Keyword(contactIndex++, name, NOUN, ARRAY_OF_WORDS, CONTACT, 5);
@@ -133,6 +139,10 @@ public class Keyword extends RealmObject {
         realm.beginTransaction();
         realm.delete(Keyword.class);
         realm.commitTransaction();
+    }
+
+    public static List<String> getContacts() {
+        return contacts;
     }
 
     public String getValue() {

@@ -122,7 +122,6 @@ public class SelectionHelper {
     public static void read(Nao nao){
         List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), importanceThreshold);
         readingNotification(aboutToRead, nao, VerbalReminder.NO_NOTIFICATION);
-
     }
 
     public static void findMissedCalls(Nao nao){
@@ -130,7 +129,7 @@ public class SelectionHelper {
         readingNotification(missedCalls, nao, VerbalReminder.NO_MISSED_CALLS);
     }
 
-    private static void readingNotification(List<NotificationMessage> aboutToRead, Nao nao, String msg){
+    public static void readingNotification(List<NotificationMessage> aboutToRead, Nao nao, String msg){
         if(aboutToRead.isEmpty()){
             try {
                 if(nao.isRunning()){
