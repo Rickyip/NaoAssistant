@@ -180,6 +180,8 @@ public class Nao {
                 user.setName(name);
                 user.setGender(gender);
                 user.setCity("Hong Kong");
+                user.save(Realm.getDefaultInstance());
+                notificationGreeting();
                 // health? sport? news? econ? weather?
             }else{
                 // case of setting family member
@@ -268,7 +270,17 @@ public class Nao {
     }
 
     public void sayConnectionGreeting() throws Exception {
-        say(VerbalReminder.CONNECTION_GREETING + VerbalReminder.INTRODUCTION);
+        say(VerbalReminder.INTRODUCTION);
+        if(isInit){
+            say(VerbalReminder.HOW_SHOULD_I_CALL_YOU);
+        }else {
+            notificationGreeting();
+        }
+
+    }
+
+    private void notificationGreeting() throws Exception {
+        say(VerbalReminder.GREETING_WITH_NAME);
         List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), SelectionHelper.getImportanceThreshold());
         if(aboutToRead.isEmpty()){
             say(VerbalReminder.NO_NOTIFICATION);

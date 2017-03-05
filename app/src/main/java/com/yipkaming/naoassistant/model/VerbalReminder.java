@@ -12,14 +12,16 @@ import com.yipkaming.naoassistant.helper.DateHelper;
 public class VerbalReminder {
 
     // Greetings
-    public static final String CONNECTION_GREETING = "Hi! I am Nao, I have connected to device " + Config.getBluetoothName();
-    public static final String INTRODUCTION = "I am your assistant today, " +
+    public static final String CONNECTION_GREETING = " I have connected to device " + Config.getBluetoothName();
+    public static final String INTRODUCTION = "Hi! I am Nao " +
+            "I am your assistant today, " +
             "You can tell me to read the messages by saying read notifications " +
             "You can also stop this service by saying Stop recognition service!";
     public static final String READ_NOTIFICATION_GREETING = "Do you want me to read the it?";
+    public static final String GREETING_WITH_NAME = "So, "+ User.getInstance().getName();
 
     // Profile
-    public static final String HOW_SHOULD_I_CALL_YOU = "So, first thing first, how do I call you master?";
+    public static final String HOW_SHOULD_I_CALL_YOU = "So how shall I call you, master?";
     public static final String YOU_CAN_CALL_ME = "You can call me ";
     public static final String CALL_ME = "Call me ";
 

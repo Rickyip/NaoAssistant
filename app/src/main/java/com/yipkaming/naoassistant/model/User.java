@@ -1,5 +1,6 @@
 package com.yipkaming.naoassistant.model;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
@@ -24,6 +25,7 @@ public class User extends RealmObject {
 
 
     public User() {
+
         instance = this;
     }
 
@@ -34,6 +36,19 @@ public class User extends RealmObject {
         this.city = city;
         this.interests = interests;
         instance = this;
+    }
+
+
+    public void save(Realm realm) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(this);
+        realm.commitTransaction();
+    }
+
+    public static void clearAll(Realm realm) {
+        realm.beginTransaction();
+        realm.delete(User.class);
+        realm.commitTransaction();
     }
 
     public String getName() {
@@ -73,7 +88,11 @@ public class User extends RealmObject {
     }
 
     public void setInterests(String interests) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         this.interests = interests;
+        realm.commitTransaction();
+        save(realm);
     }
 
     public static User getInstance() {
