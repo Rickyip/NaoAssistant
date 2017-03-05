@@ -39,7 +39,9 @@ public class Keyword extends RealmObject {
     public static final String SYSTEM = "System";
     public static final String SCHEDULE = "Schedule";
     public static final String COMMUNICATION = "Communication";
+    public static final String OTHER = "Other";
     public static final String CONTACT = "Contact";
+    public static final String HEALTH = "Health";
 
     @PrimaryKey
     @Index

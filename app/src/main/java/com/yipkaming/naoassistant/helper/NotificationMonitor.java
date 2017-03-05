@@ -103,21 +103,30 @@ public class NotificationMonitor extends NotificationListenerService {
         Log.e(TAG, "onNotificationPosted: " );
         Log.i(TAG, "have " + currentNotificationsCounts + " active notifications");
         postedNotification = sbn;
-
-        NotificationMessage.initMessages(sbn);
-        try {
-            Nao nao = Nao.getInstance();
-            if(nao.isRunning()){
-                if(!nao.isInit()) {
-                    nao.say(VerbalReminder.NEW_NOTIFICATION);
-                }
-                nao.setConfirmAction(new ReadNotification());
-            }else{
-                Log.e(TAG, "onNotificationPosted: " );
+        Nao nao = Nao.getInstance();
+        if(sbn.getPackageName().equalsIgnoreCase("com.android.incallui")){
+            try {
+                nao.say(VerbalReminder.YOU_HAVE_A+VerbalReminder.INCOMING_CALL);
+                Log.e(TAG, "onNotificationPosted: "+ VerbalReminder.INCOMING_CALL );
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }else {
+            NotificationMessage.initMessages(sbn);
+            try {
+                if(nao.isRunning()){
+                    if(!nao.isInit()) {
+                        nao.say(VerbalReminder.NEW_NOTIFICATION);
+                    }
+                    nao.setConfirmAction(new ReadNotification());
+                }else{
+                    Log.e(TAG, "onNotificationPosted: " );
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
 
 //        Bundle extras = sbn.getNotification().extras;
 //        String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
@@ -126,8 +135,6 @@ public class NotificationMonitor extends NotificationListenerService {
 ////        Log.i(TAG, "notificationTitle:"+notificationTitle);
 ////        Log.i(TAG, "notificationText:"+notificationText);
 ////        Log.i(TAG, "notificationSubText:"+notificationSubText);
-
-
 
 //        NaoAssistant.getNotificationManager().cancel(sbn.getExtraContent(), sbn.getId());
     }

@@ -55,25 +55,25 @@ public class SelectionHelper {
 
         // Change of flow
 
-        // If the importance passes the threshold, it will be presented
-//        if(importance >= getImportanceThreshold()){
-//            VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
-//            try {
-//                Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
-//                if( nao != null && nao.isRunning()){
-//                    nao.say(verbalReminder.getReminder());
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+                // If the importance passes the threshold, it will be presented
+        //        if(importance >= getImportanceThreshold()){
+        //            VerbalReminder verbalReminder = new VerbalReminder(notificationMessage);
+        //            try {
+        //                Log.e(TAG, "Say: "+ verbalReminder.getReminder() );
+        //                if( nao != null && nao.isRunning()){
+        //                    nao.say(verbalReminder.getReminder());
+        //                }
+        //            } catch (Exception e) {
+        //                e.printStackTrace();
+        //            }
+        //        }
 
-        // 1. important application?
-        // 2. if no, any keywords in content/ title?
-        // 3. if 1 yes or 2 yes, pass to verbal message class
-        // 4. if both no, notificationMessage.setImportance(1), and push to nao
-        // 5. notificationMessage.save()   save to db
-        // 6. end
+                // 1. important application?
+                // 2. if no, any keywords in content/ title?
+                // 3. if 1 yes or 2 yes, pass to verbal message class
+                // 4. if both no, notificationMessage.setImportance(1), and push to nao
+                // 5. notificationMessage.save()   save to db
+                // 6. end
     }
 
     private int getImportanceOfEachWords(String[] arrayOfWords) {
