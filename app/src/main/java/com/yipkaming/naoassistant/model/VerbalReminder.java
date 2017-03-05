@@ -18,6 +18,11 @@ public class VerbalReminder {
             "You can also stop this service by saying Stop recognition service!";
     public static final String READ_NOTIFICATION_GREETING = "Do you want me to read the it?";
 
+    // Profile
+    public static final String HOW_SHOULD_I_CALL_YOU = "So, first thing first, how do I call you master?";
+    public static final String YOU_CAN_CALL_ME = "You can call me ";
+    public static final String CALL_ME = "Call me ";
+
     // Standard message words
     public static final String NO_NOTIFICATION = "You don't have new messages";
     public static final String NEW_NOTIFICATION = "You have new messages, do you want me to read it?";
@@ -49,6 +54,7 @@ public class VerbalReminder {
     public static final String GMAIL_PACKAGE = "com.google.android.gm";
     public static final String WHATSAPP = "com.whatsapp";
     public static final String MISSED_VOICE_CALL = "Missed voice call";
+    public static final String INCOMING_CALL = "incoming call";
 
 
     // Responses
