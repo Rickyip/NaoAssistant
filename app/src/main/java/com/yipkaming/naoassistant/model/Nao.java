@@ -197,8 +197,6 @@ public class Nao {
                 user.save(Realm.getDefaultInstance());
                 notificationGreeting();
                 // health? sport? news? econ? weather?
-            }else{
-                // case of setting family member
             }
 
         }else {

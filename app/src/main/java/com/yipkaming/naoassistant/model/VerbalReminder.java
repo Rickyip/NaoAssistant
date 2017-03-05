@@ -4,9 +4,6 @@ import android.util.Log;
 
 import com.yipkaming.naoassistant.helper.DateHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * Created by Yip on 7/10/2016.
@@ -172,20 +169,6 @@ public class VerbalReminder {
         return DateHelper.getDaysHoursMinutes(Long.valueOf(time));
     }
 
-    public static List<String> getRelativeList(){
-        List<String> reletives = new ArrayList<>();
-        reletives.add(SON);
-        reletives.add(DAUGHTER);
-        reletives.add(SISTER);
-        reletives.add(BROTHER);
-        reletives.add(GRANDSON);
-        reletives.add(GRANDDAUGHTR);
-        reletives.add(NIECE);
-        reletives.add(NEPHEW);
-        reletives.add(HUSBAND);
-        reletives.add(WIFE);
-        return reletives;
-    }
 }
 
 /*
