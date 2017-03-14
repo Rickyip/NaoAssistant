@@ -1,12 +1,16 @@
 package com.yipkaming.naoassistant.activity;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +20,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.yipkaming.naoassistant.NaoAssistant;
 import com.yipkaming.naoassistant.fragment.ConnectionFragment;
 import com.yipkaming.naoassistant.helper.NotificationMonitor;
 import com.yipkaming.naoassistant.R;
+import com.yipkaming.naoassistant.helper.NotificationPublisher;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Keyword;
 import com.yipkaming.naoassistant.model.Nao;
@@ -181,6 +187,7 @@ public class AssistantActivity extends AppCompatActivity implements ConnectionFr
         }
         context.sendBroadcast(intent);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

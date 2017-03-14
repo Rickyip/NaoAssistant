@@ -25,9 +25,13 @@ public class DateHelper {
     private static final String LOWER_TODAY = "today";
     private static final String LOWER_TOMORROW = "tomorrow";
     private static final String LOWER_EVERYDAY = "everyday";
-    public static final String LOWER_MINUTES = "minutes";
-    public static final String LOWER_HOURS = "hours";
-    public static final String LOWER_HOUR = "hour";
+
+    public static final String LOWER_MINUTE = "minute ";
+    public static final String LOWER_MINUTES = "minutes ";
+    public static final String LOWER_HOURS = "hours ";
+    public static final String LOWER_HOUR = "hour ";
+
+    public static final String LATER = "later";
 
 
     public static final String ONE = "one";
@@ -38,7 +42,7 @@ public class DateHelper {
     public static final String SIX = "six";
     public static final String SEVEN = "seven";
     public static final String EIGHT = "eight";
-    public static final String NINE = "nie";
+    public static final String NINE = "nine";
 
     public static final String ELEVEN = "eleven";
     public static final String TWELVE= "twelve";
@@ -47,6 +51,40 @@ public class DateHelper {
     public static final String TEN = "ten";
     public static final String FIFTEEN = "fifteen";
     public static final String TWENTY = "twenty";
+    public static final String TWENTY_FIVE = "twenty five";
+    public static final String THIRTY = "thirty";
+    public static final String THIRTY_FIVE = "thirty five";
+    public static final String FORTY = "forty";
+    public static final String FORTY_FIVE = "forty five";
+    public static final String FIFTY = "fifty";
+    public static final String FIFTY_FIVE = "fifty five";
+
+
+    public static final String ONE_UPPER = "One";
+    public static final String TWO_UPPER = "Two";
+    public static final String THREE_UPPER = "Three";
+    public static final String FOUR_UPPER = "Four";
+
+    public static final String SIX_UPPER = "Six";
+    public static final String SEVEN_UPPER = "Seven";
+    public static final String EIGHT_UPPER = "Eight";
+    public static final String NINE_UPPER = "Nine";
+
+    public static final String ELEVEN_UPPER = "Eleven";
+    public static final String TWELVE_UPPER = "Twelve";
+
+    public static final String FIVE_UPPER = "Five";
+    public static final String TEN_UPPER = "Ten";
+    public static final String FIFTEEN_UPPER = "Fifteen";
+    public static final String TWENTY_UPPER = "Twenty";
+    public static final String TWENTY_FIVE_UPPER = "Twenty five";
+    public static final String THIRTY_UPPER = "Thirty";
+    public static final String THIRTY_FIVE_UPPER = "Thirty five";
+    public static final String FORTY_UPPER = "Forty";
+    public static final String FORTY_FIVE_UPPER = "Forty five";
+    public static final String FIFTY_UPPER = "Fifty";
+    public static final String FIFTY_FIVE_UPPER = "Fifty five";
+
 
     public static final String AT = "at";
     public static final String AM = "am";
