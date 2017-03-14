@@ -13,12 +13,13 @@ public class VerbalReminder {
 
     // Greetings
     public static final String CONNECTION_GREETING = " I have connected to device " + Config.getBluetoothName();
-    public static final String INTRODUCTION = "Hi! I am Nao " +
+    public static final String INTRODUCTION = "Hi! I am Nao, and " +
             "I am your assistant today, " +
             "You can tell me to read the messages by saying read notifications " +
             "You can also stop this service by saying Stop recognition service!";
     public static final String READ_NOTIFICATION_GREETING = "Do you want me to read the it?";
-    public static final String GREETING_WITH_NAME = "So, "+ User.getInstance().getName();
+//    public static final String GREETING_WITH_NAME = "So, "+ User.getInstance().getName();
+    public static final String GREETING_WITH_NAME = Config.getBluetoothName();
 
     // Profile
     public static final String HOW_SHOULD_I_CALL_YOU = "So how shall I call you, master?";
@@ -41,6 +42,9 @@ public class VerbalReminder {
     public static final String ANY_MESSAGES_FROM = "Any messages from ";
     public static final String NOTHING_FROM = "You have no messages from ";
 
+    // Reminder
+    public static final String WHAT_TIME = "What time?";
+    public static final String WHAT_EVENT = "What kind of event?";
 
     // Standard message words
     public static final String NO_NOTIFICATION = "You don't have new messages";
