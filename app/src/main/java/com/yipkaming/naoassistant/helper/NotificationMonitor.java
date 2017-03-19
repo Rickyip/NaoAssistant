@@ -18,6 +18,7 @@ import com.yipkaming.naoassistant.NaoAssistant;
 import com.yipkaming.naoassistant.model.Config;
 import com.yipkaming.naoassistant.model.Nao;
 import com.yipkaming.naoassistant.model.NotificationMessage;
+import com.yipkaming.naoassistant.model.Reminder;
 import com.yipkaming.naoassistant.model.VerbalReminder;
 import com.yipkaming.naoassistant.strategy.ReadNotification;
 
@@ -104,10 +105,29 @@ public class NotificationMonitor extends NotificationListenerService {
         Log.i(TAG, "have " + currentNotificationsCounts + " active notifications");
         postedNotification = sbn;
         Nao nao = Nao.getInstance();
-        if(sbn.getPackageName().equalsIgnoreCase("com.android.incallui")){
+        String packageName = sbn.getPackageName();
+
+
+        if(packageName.equalsIgnoreCase("com.android.incallui")){
             try {
                 nao.say(VerbalReminder.YOU_HAVE_A+VerbalReminder.INCOMING_CALL);
                 Log.e(TAG, "onNotificationPosted: "+ VerbalReminder.INCOMING_CALL );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(packageName.equalsIgnoreCase("com.yipkaming.naoassistant")){
+            String androidText = "";
+            Bundle extra = sbn.getNotification().extras;
+            if(extra.getCharSequence("android.text") != null){
+                androidText = extra.getCharSequence("android.text").toString();
+            }
+            if("".equalsIgnoreCase(androidText)){
+                androidText = "something";
+            }
+            try {
+                nao.say(VerbalReminder.REMINDER_GREETING);
+                nao.say(VerbalReminder.YOU_HAVE_A+VerbalReminder.SCHEDULE+VerbalReminder.ABOUT+androidText);
+                NotificationMessage.initMessages(sbn);
             } catch (Exception e) {
                 e.printStackTrace();
             }

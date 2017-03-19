@@ -11,8 +11,10 @@ import com.aldebaran.qi.helper.proxies.ALSpeechRecognition;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.yipkaming.naoassistant.helper.DateHelper;
 import com.yipkaming.naoassistant.helper.SelectionHelper;
+import com.yipkaming.naoassistant.strategy.ChangePreference;
 import com.yipkaming.naoassistant.strategy.ConfirmAction;
 import com.yipkaming.naoassistant.strategy.ReadNotification;
+import com.yipkaming.naoassistant.strategy.ReadTutorial;
 import com.yipkaming.naoassistant.strategy.StopASR;
 
 import java.util.ArrayList;
@@ -49,14 +51,19 @@ public class Nao {
 
     private String url;
     private boolean running = false;
+    private Reminder pendingReminder;
+    private float volumeLevel = (float) 0.5;   // set default value to be 50%
+
+
+    private boolean isMakingReminder;
+    private boolean isSettingPrefence;
     private boolean isInit = true;
+
+    private List<String> reminderType;
     private List<String> names;
     private List<String> relativesAndFriends;
     private List<String> reminderCommands;
-    private Reminder pendingReminder;
-    private float volumeLevel = (float) 0.5;   // set default value to be 50%
-    private boolean isMakingReminder;
-    private List<String> reminderType;
+    private List<String> preferenceType;
 
     public boolean isRunning(){
         return running;
@@ -135,6 +142,7 @@ public class Nao {
 //        initNameList();
         initRelativesList();
         initReminderCommandList();
+        initPreferenceList();
 
         List<String> vocab = new ArrayList<>();
         vocab.add("Nao");               vocab.add("Yes please");
@@ -143,10 +151,17 @@ public class Nao {
         vocab.add("Any missed call");   vocab.add("Stop speech recognition service");
         vocab.add("Setup profile");     vocab.add("Make reminder");
         vocab.add("No");                vocab.add("Not really");
-        vocab.add("I don't");           vocab.add("Thank you");
+        vocab.add("No I don't");        vocab.add("Thank you");
+        vocab.add("Help");              vocab.add("Teach me how to operate");
+        vocab.add("Read tutorial");     vocab.add("I don't understand");
+        vocab.add("Change setting");    vocab.add("Change priority");
+
+
+
 //        vocab.addAll(names);
         vocab.addAll(relativesAndFriends);
         vocab.addAll(reminderCommands);
+        vocab.addAll(preferenceType);
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
@@ -162,6 +177,7 @@ public class Nao {
         alMemory.subscribeToEvent("MiddleTactilTouched", "onEnd::(f)", this);
         app.run();
     }
+
 
     public void onWordRecognized(Object words) throws Exception {
         String word = (String) ((List<Object>)words).get(0);
@@ -213,6 +229,9 @@ public class Nao {
 //                    // health? sport? news? econ? weather?
 //                }
 //            }
+        }else if(isSettingPrefence && preferenceType.contains(word)){
+            alTextToSpeech.say(VerbalReminder.PREFERNCE_SETTING_QUESTION2);
+            confirmAction = new ChangePreference(word);
         }else if(isMakingReminder){
             if(word.contains(DateHelper.TODAY) || word.contains(DateHelper.TOMORROW)
                     || word.contains(DateHelper.AM)  || word.contains(DateHelper.PM)
@@ -224,6 +243,7 @@ public class Nao {
             }
         }else {
             switch (word) {
+
                 case "Nao":
                     alTextToSpeech.say(VerbalReminder.HOW_CAN_I_HELP_YOU);
                     break;
@@ -248,6 +268,7 @@ public class Nao {
                 case "How are you?":
                     alTextToSpeech.say(VerbalReminder.I_AM_FINE_THANKYOU);
                     break;
+
                 case "Read notifications":
                     SelectionHelper.read(this);
                     break;
@@ -270,17 +291,60 @@ public class Nao {
                     alTextToSpeech.say(VerbalReminder.WHAT_TIME);
                     isMakingReminder = true;
                     break;
+
                 case "No":
+                    if (confirmAction != null) {
+                        confirmAction.decline();
+                    }
                     confirmAction = null;
-                    alTextToSpeech.say("Ok then");
+                case "No I don't":
+                    if (confirmAction != null) {
+                        confirmAction.decline();
+                    }
+                    confirmAction = null;
                     break;
                 case "Not really":
+                    if (confirmAction != null) {
+                        confirmAction.decline();
+                    }
                     confirmAction = null;
-                    alTextToSpeech.say("Ok then");
                     break;
+
                 case "Thank you":
                     alTextToSpeech.say("You are welcome"+ VerbalReminder.GREETING_WITH_NAME);
                     break;
+
+
+                case "Help":
+                    alTextToSpeech.say(VerbalReminder.ASK_READING_TUTORIAL_GREETING);
+                    confirmAction = new ReadTutorial();
+                    break;
+
+                case "I don't understand":
+                    alTextToSpeech.say(VerbalReminder.ASK_READING_TUTORIAL_GREETING);
+                    confirmAction = new ReadTutorial();
+                    break;
+
+                case "Read tutorial":
+                    alTextToSpeech.say(VerbalReminder.ALLTUTORIAL);
+                    break;
+
+                case "Teach me how to operate":
+                    alTextToSpeech.say(VerbalReminder.ALLTUTORIAL);
+                    break;
+
+
+                case "Change setting":
+                    alTextToSpeech.say(VerbalReminder.PREFERNCE_SETTING_QUESTION1);
+                    isSettingPrefence = true;
+                    break;
+                case "Change priority":
+                    alTextToSpeech.say(VerbalReminder.PREFERNCE_SETTING_QUESTION1);
+                    isSettingPrefence = true;
+                    break;
+
+
+
                 case "":
                     break;
                 default:
@@ -372,66 +436,45 @@ public class Nao {
         alTextToSpeech.setVolume(volumeLevel); // 1.0 = set volume to 100%
     }
 
-
-    private void initRelativesList() {
-        relativesAndFriends = new ArrayList<>();
-//        List<String> relativeList = VerbalReminder.getRelativeList();
-//        relativesAndFriends.addAll(relativeList);
-
-//        relativesAndFriends.add("Son");
-//        relativesAndFriends.add("Daughter");
-//        relativesAndFriends.add("Sister");
-//        relativesAndFriends.add("Brother");
-//        relativesAndFriends.add("Grandson");
-//        relativesAndFriends.add("Granddaughter");
-//        relativesAndFriends.add("Niece");
-//        relativesAndFriends.add("Nephew");
-//        relativesAndFriends.add("Husband");
-//        relativesAndFriends.add("Wife");
-//
-//        List<String> list2 = new ArrayList<>();
-//        List<String> list3 = new ArrayList<>();
-
-        String any_msg_from = VerbalReminder.ANY_MESSAGES_FROM;
-        String did = VerbalReminder.DID;
-        String find_me = VerbalReminder.FIND_ME;
-
-//        for(String relative : relativesAndFriends){
-//            relative = relative.toLowerCase();
-//            list2.add(any_msg_from+relative);
-//            list3.add(did+relative+find_me);
-//        }
-
-        List<String> list4 = new ArrayList<>();
-        List<String> list5 = new ArrayList<>();
-
-        for(String name: Keyword.contacts){
-            name = name.toLowerCase();
-            list4.add(any_msg_from+name);
-            list5.add(did+name+find_me);
-        }
-
-//        relativesAndFriends.addAll(list2);
-//        relativesAndFriends.addAll(list3);
-        relativesAndFriends.addAll(list4);
-        relativesAndFriends.addAll(list5);
+    public ConfirmAction getConfirmAction() {
+        return confirmAction;
     }
 
+    public void setConfirmAction(ConfirmAction confirmAction) {
+        this.confirmAction = confirmAction;
+    }
+
+    public boolean isInit() {
+        return isInit;
+    }
+
+    public void setInit(boolean init) {
+        isInit = init;
+    }
+
+    public float getVolumeLevel() {
+        return volumeLevel;
+    }
+
+    public void setVolumeLevel(float volumeLevel) {
+        this.volumeLevel = volumeLevel;
+    }
+
+
+    private void initPreferenceList() {
+        preferenceType = new ArrayList<>();
+        preferenceType.add("Health");     preferenceType.add("News");   preferenceType.add("Weather");    preferenceType.add("Communication");
+    }
 
     private void initReminderCommandList() {
         reminderCommands = new ArrayList<>();
 
         reminderType = new ArrayList<>();
-        reminderType.add("Family");
-        reminderType.add("Family gathering");
-        reminderType.add("Family dinner");
-        reminderType.add("Family day");
-        reminderType.add("Meeting");
-        reminderType.add("Doctor meeting");
-        reminderType.add("Work");
-        reminderType.add("Scheduling");
-        reminderType.add("Exercise");
-        reminderType.add("Reminder");
+        reminderType.add("Family");         reminderType.add("Family gathering");
+        reminderType.add("Family dinner");  reminderType.add("Family day");
+        reminderType.add("Meeting");        reminderType.add("Doctor meeting");
+        reminderType.add("Work");           reminderType.add("Scheduling");
+        reminderType.add("Exercise");       reminderType.add("Reminder");
 
         reminderCommands.addAll(reminderType);
 
@@ -519,6 +562,52 @@ public class Nao {
     }
 
 
+
+    private void initRelativesList() {
+        relativesAndFriends = new ArrayList<>();
+//        List<String> relativeList = VerbalReminder.getRelativeList();
+//        relativesAndFriends.addAll(relativeList);
+
+//        relativesAndFriends.add("Son");
+//        relativesAndFriends.add("Daughter");
+//        relativesAndFriends.add("Sister");
+//        relativesAndFriends.add("Brother");
+//        relativesAndFriends.add("Grandson");
+//        relativesAndFriends.add("Granddaughter");
+//        relativesAndFriends.add("Niece");
+//        relativesAndFriends.add("Nephew");
+//        relativesAndFriends.add("Husband");
+//        relativesAndFriends.add("Wife");
+//
+//        List<String> list2 = new ArrayList<>();
+//        List<String> list3 = new ArrayList<>();
+
+        String any_msg_from = VerbalReminder.ANY_MESSAGES_FROM;
+        String did = VerbalReminder.DID;
+        String find_me = VerbalReminder.FIND_ME;
+
+//        for(String relative : relativesAndFriends){
+//            relative = relative.toLowerCase();
+//            list2.add(any_msg_from+relative);
+//            list3.add(did+relative+find_me);
+//        }
+
+        List<String> list4 = new ArrayList<>();
+        List<String> list5 = new ArrayList<>();
+
+        for(String name: Keyword.contacts){
+            name = name.toLowerCase();
+            list4.add(any_msg_from+name);
+            list5.add(did+name+find_me);
+        }
+
+//        relativesAndFriends.addAll(list2);
+//        relativesAndFriends.addAll(list3);
+        relativesAndFriends.addAll(list4);
+        relativesAndFriends.addAll(list5);
+    }
+
+
     private void initNameList(){
         names = new ArrayList<>();   // names used to setup user profile
         names.add("Michael");   names.add("Linda");     names.add("Robert");    names.add("Patricia");
@@ -547,29 +636,5 @@ public class Nao {
         names.addAll(nameList2);
         names.addAll(nameList3);
         names = null;
-    }
-
-    public ConfirmAction getConfirmAction() {
-        return confirmAction;
-    }
-
-    public void setConfirmAction(ConfirmAction confirmAction) {
-        this.confirmAction = confirmAction;
-    }
-
-    public boolean isInit() {
-        return isInit;
-    }
-
-    public void setInit(boolean init) {
-        isInit = init;
-    }
-
-    public float getVolumeLevel() {
-        return volumeLevel;
-    }
-
-    public void setVolumeLevel(float volumeLevel) {
-        this.volumeLevel = volumeLevel;
     }
 }

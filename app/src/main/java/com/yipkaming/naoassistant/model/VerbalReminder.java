@@ -45,6 +45,25 @@ public class VerbalReminder {
     // Reminder
     public static final String WHAT_TIME = "What time?";
     public static final String WHAT_EVENT = "What kind of event?";
+    public static final String REMINDER_GREETING = "Hey"+GREETING_WITH_NAME+"I want to reminder you something. ";
+
+    // Tutorial
+    public static final String CHANGE_PRIORITY = "You can say 'change setting' to change your preference.";
+    public static final String READ_NOTI_TUTORIAL = "You can say 'read notification' to see what valuable messages you have.";
+    public static final String MAKE_REMINDER_TUTORIAL = "You can say 'make reminder' to schedule a reminder youself.";
+    public static final String MISSED_CALL_TUTORIAL = "You can ask me how many missed call by saying 'Any missed call'.";
+    public static final String STOP_ASR_TUTORIAL = "You can also stop my speech recognition service by saying 'stop speech recognition service'" +
+            " or simple saying 'stop ASR";
+    public static final String ALLTUTORIAL = READ_NOTI_TUTORIAL + CHANGE_PRIORITY
+                                            + MAKE_REMINDER_TUTORIAL + MISSED_CALL_TUTORIAL
+                                            + STOP_ASR_TUTORIAL;
+    public static final String ASK_READING_TUTORIAL_GREETING = "Do you want to learn the voice command?" + GREETING_WITH_NAME;
+
+
+    // Preference
+    public static final String PREFERNCE_SETTING_QUESTION1 = "So which one you want to change? health, news, weather or communication?";
+    public static final String PREFERNCE_SETTING_QUESTION2 = "Do you want it more?";
+    public static final String PREFERNCE_SETTING_FINISHED = "Ok, the preference setting is changed.";
 
     // Standard message words
     public static final String NO_NOTIFICATION = "You don't have new messages";
@@ -66,6 +85,7 @@ public class VerbalReminder {
     public static final String COLON = ":";
     public static final String LONG = " long ";
     public static final String TITLED = " titled ";
+    public static final String ABOUT = "about" ;
 
     // Identifier
     public static final String COM_DOT = "com.";
@@ -85,6 +105,7 @@ public class VerbalReminder {
     public static final String I_AM_FINE_THANKYOU = "I am fine, thank you";
     public static final String SORRY_I_DONT_UNDERSTAND = "Sorry I don't understand";
     public static final String HOW_CAN_I_HELP_YOU = "How can I help you?";
+    public static final String OK_THEN = "Ok then.";
 
     // Attributes
     private String time;

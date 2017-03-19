@@ -20,6 +20,7 @@ import com.yipkaming.naoassistant.helper.NotificationPublisher;
 public class Reminder {
 
     private static final String TAG = Config.getSimpleName(Reminder.class);
+    public static final String TITLE = "Scheduled Notification from Nao";
 
     private long id;
     private String time;
@@ -35,7 +36,7 @@ public class Reminder {
         int delay = (int) DateHelper.getReminderTimestamp(time);
         Log.e(TAG, "scheduleNotification: "+ delay);
         Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, id);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -47,7 +48,7 @@ public class Reminder {
     public Notification makeNotification(){
         Log.e(TAG, "makeNotification: ");
         Notification.Builder builder = new Notification.Builder(context);
-        builder.setContentTitle("Scheduled Notification");
+        builder.setContentTitle(TITLE);
         builder.setContentText(name);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         return builder.build();
