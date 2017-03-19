@@ -6,4 +6,5 @@ package com.yipkaming.naoassistant.strategy;
 
 public interface ConfirmAction {
     public void confirm();
+    public void decline();
 }
