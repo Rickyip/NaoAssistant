@@ -5,6 +5,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.yipkaming.naoassistant.NaoAssistant;
+import com.yipkaming.naoassistant.helper.SelectionHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,6 +127,21 @@ public class Keyword extends RealmObject {
                 .where(Keyword.class)
                 .equalTo("value", word)
                 .findFirst();
+    }
+
+
+    public static void changeKeyWordsPreference(String type, boolean wantsMore){
+        Realm realm = Realm.getDefaultInstance();
+        List<Keyword> keywords = realm.where(Keyword.class).equalTo("category", type).findAll();
+        if(!keywords.isEmpty()){
+            int threshold = SelectionHelper.getImportanceThreshold();
+            threshold = wantsMore ? threshold+1 : threshold-1;
+            for(Keyword keyword: keywords){
+                realm.beginTransaction();
+                keyword.setImportance(threshold);
+                realm.commitTransaction();
+            }
+        }
     }
 
     public void save(Realm realm) {

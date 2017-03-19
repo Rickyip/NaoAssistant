@@ -750,5 +750,13 @@
     "wordCombination":"concat",
     "category":"System",
     "importance":2
+  },
+  {
+    "id": 94,
+    "value": "Scheduled Notification from Nao",
+    "wordType":"Noun Name",
+    "wordCombination":"Array of words",
+    "category":"System",
+    "importance":5
   }
 ]
