@@ -11,6 +11,8 @@ public abstract class ALProxy
     protected AnyObject service;
     protected String name;
 
+    public ALProxy() {}
+
     public ALProxy(Session session)
             throws Exception
     {

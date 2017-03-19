@@ -90,7 +90,7 @@ public class ConnectionFragment extends Fragment {
             Log.e("connect: ", "!!!!!!!!!!!!!!!!!" );
             setUIItems(connected);
             try {
-                nao.sayConnectionGreeting();
+                nao.initAfterConnection();
             } catch (Exception e) {
                 e.printStackTrace();
             }

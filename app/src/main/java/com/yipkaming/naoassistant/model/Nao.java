@@ -5,6 +5,7 @@ import android.util.Log;
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.CallError;
 import com.aldebaran.qi.Session;
+import com.aldebaran.qi.helper.proxies.ALAutonomousLife;
 import com.aldebaran.qi.helper.proxies.ALMemory;
 import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALSpeechRecognition;
@@ -45,6 +46,7 @@ public class Nao {
     private ALSpeechRecognition alSpeechRecognition;
     private ALMemory alMemory;
     private ALMotion alMotion;
+    private ALAutonomousLife alAutonomousLife;
 
 
     private ConfirmAction confirmAction;
@@ -86,6 +88,22 @@ public class Nao {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void initAfterConnection(){
+        try {
+            sayConnectionGreeting();
+            alAutonomousLife = new ALAutonomousLife(getSession());
+            alAutonomousLife.setState("solitary");
+//            if(alAutonomousLife.isStatsEnabled()){
+
+            Log.e(TAG, "initAfterConnection: switchFocus"+ alAutonomousLife.getState() );
+//                alAutonomousLife.switchFocus("interactive");
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void stop(){
@@ -162,6 +180,15 @@ public class Nao {
         vocab.addAll(relativesAndFriends);
         vocab.addAll(reminderCommands);
         vocab.addAll(preferenceType);
+
+//        List<String> vocab2 = new ArrayList<>();
+//
+//        for(String word: vocab){
+//            Keyword.firstLetterToLowercase(word);
+//            vocab2.add(word);
+//        }
+//
+//        vocab.addAll(vocab2);
 
         alSpeechRecognition.setLanguage(ENGLISH);
         alSpeechRecognition.setVocabulary(vocab, false);
@@ -342,6 +369,106 @@ public class Nao {
                     alTextToSpeech.say(VerbalReminder.PREFERNCE_SETTING_QUESTION1);
                     isSettingPrefence = true;
                     break;
+
+//  Lower case, sometimes it has bugs while it is alive
+//                case "nao":
+//                    alTextToSpeech.say(VerbalReminder.HOW_CAN_I_HELP_YOU);
+//                    break;
+//                case "yes please":
+//                    if (confirmAction != null) {
+//                        confirmAction.confirm();
+//                        setConfirmAction(null);
+//                    } else {
+//                        alTextToSpeech.say(VerbalReminder.GOOD);
+//                    }
+////                SelectionHelper.read(this);
+//                    break;
+//                case "ok":
+//                    if (confirmAction != null) {
+//                        confirmAction.confirm();
+//                        setConfirmAction(null);
+//                    } else {
+//                        alTextToSpeech.say(VerbalReminder.GOOD);
+//                    }
+////                SelectionHelper.read(this);
+//                    break;
+//                case "how are you?":
+//                    alTextToSpeech.say(VerbalReminder.I_AM_FINE_THANKYOU);
+//                    break;
+//
+//                case "read notifications":
+//                    SelectionHelper.read(this);
+//                    break;
+//                case "stop ASR":
+//                    alTextToSpeech.say("Do you mean to stop speech recognition service?");
+//                    confirmAction = new StopASR();
+////                endRecognitionService();
+//                    break;
+//                case "stop speech recognition service":
+//                    endRecognitionService();
+//                    break;
+//                case "any missed call":
+//                    SelectionHelper.findMissedCalls(this);
+//                    break;
+//                case "setup profile":
+////                    alTextToSpeech.say(VerbalReminder.HOW_SHOULD_I_CALL_YOU);
+////                    User.setInstance(null);
+//                    break;
+//                case "make reminder":
+//                    alTextToSpeech.say(VerbalReminder.WHAT_TIME);
+//                    isMakingReminder = true;
+//                    break;
+//
+//                case "no":
+//                    if (confirmAction != null) {
+//                        confirmAction.decline();
+//                    }
+//                    confirmAction = null;
+//                case "no I don't":
+//                    if (confirmAction != null) {
+//                        confirmAction.decline();
+//                    }
+//                    confirmAction = null;
+//                    break;
+//                case "not really":
+//                    if (confirmAction != null) {
+//                        confirmAction.decline();
+//                    }
+//                    confirmAction = null;
+//                    break;
+//
+//                case "thank you":
+//                    alTextToSpeech.say("You are welcome"+ VerbalReminder.GREETING_WITH_NAME);
+//                    break;
+//
+//
+//                case "help":
+//                    alTextToSpeech.say(VerbalReminder.ASK_READING_TUTORIAL_GREETING);
+//                    confirmAction = new ReadTutorial();
+//                    break;
+//
+//                case "i don't understand":
+//                    alTextToSpeech.say(VerbalReminder.ASK_READING_TUTORIAL_GREETING);
+//                    confirmAction = new ReadTutorial();
+//                    break;
+//
+//                case "read tutorial":
+//                    alTextToSpeech.say(VerbalReminder.ALLTUTORIAL);
+//                    break;
+//
+//                case "teach me how to operate":
+//                    alTextToSpeech.say(VerbalReminder.ALLTUTORIAL);
+//                    break;
+//
+//
+//                case "change setting":
+//                    alTextToSpeech.say(VerbalReminder.PREFERNCE_SETTING_QUESTION1);
+//                    isSettingPrefence = true;
+//                    break;
+//                case "change priority":
+//                    alTextToSpeech.say(VerbalReminder.PREFERNCE_SETTING_QUESTION1);
+//                    isSettingPrefence = true;
+//                    break;
 
 
 

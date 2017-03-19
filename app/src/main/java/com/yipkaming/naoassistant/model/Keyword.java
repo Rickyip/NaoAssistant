@@ -144,6 +144,15 @@ public class Keyword extends RealmObject {
         }
     }
 
+    public static String firstLetterToLowercase(String s){
+        String string = "";
+        if(s != null && s.length() > 1){
+            string = s;
+            string = Character.toLowerCase(string.charAt(0)) + string.substring(1);
+        }
+        return string;
+    }
+
     public void save(Realm realm) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(this);
