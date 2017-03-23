@@ -16,10 +16,10 @@ public class VerbalReminder {
     public static final String INTRODUCTION = "Hi! I am Nao, and " +
             "I am your assistant today, " +
             "You can tell me to read the messages by saying read notifications " +
-            "You can also stop this service by saying Stop recognition service!";
+            "You can also make a reminder by saying make reminder!";
     public static final String READ_NOTIFICATION_GREETING = "Do you want me to read the it?";
-//    public static final String GREETING_WITH_NAME = "So, "+ User.getInstance().getName();
-    public static final String GREETING_WITH_NAME = Config.getBluetoothName();
+//    public static final String USER_BT_NAME = "So, "+ User.getInstance().getName();
+    public static final String USER_BT_NAME = Config.getBluetoothName();
 
     // Profile
     public static final String HOW_SHOULD_I_CALL_YOU = "So how shall I call you, master?";
@@ -37,6 +37,7 @@ public class VerbalReminder {
     public static final String NEPHEW = "Nephew";
     public static final String HUSBAND = "Husband";
     public static final String WIFE = "Wife";
+
     public static final String DID = "Did ";
     public static final String FIND_ME = " find me?";
     public static final String ANY_MESSAGES_FROM = "Any messages from ";
@@ -45,19 +46,19 @@ public class VerbalReminder {
     // Reminder
     public static final String WHAT_TIME = "What time?";
     public static final String WHAT_EVENT = "What kind of event?";
-    public static final String REMINDER_GREETING = "Hey"+GREETING_WITH_NAME+"I want to reminder you something. ";
+    public static final String REMINDER_GREETING = "Hey"+ USER_BT_NAME +"I want to reminder you something. ";
 
     // Tutorial
     public static final String CHANGE_PRIORITY = "You can say 'change setting' to change your preference.";
     public static final String READ_NOTI_TUTORIAL = "You can say 'read notification' to see what valuable messages you have.";
-    public static final String MAKE_REMINDER_TUTORIAL = "You can say 'make reminder' to schedule a reminder youself.";
+    public static final String MAKE_REMINDER_TUTORIAL = "You can say 'make reminder' to schedule a reminder yourself.";
     public static final String MISSED_CALL_TUTORIAL = "You can ask me how many missed call by saying 'Any missed call'.";
     public static final String STOP_ASR_TUTORIAL = "You can also stop my speech recognition service by saying 'stop speech recognition service'" +
             " or simple saying 'stop ASR";
     public static final String ALLTUTORIAL = READ_NOTI_TUTORIAL + CHANGE_PRIORITY
                                             + MAKE_REMINDER_TUTORIAL + MISSED_CALL_TUTORIAL
                                             + STOP_ASR_TUTORIAL;
-    public static final String ASK_READING_TUTORIAL_GREETING = "Do you want to learn the voice command?" + GREETING_WITH_NAME;
+    public static final String ASK_READING_TUTORIAL_GREETING = "Do you want to learn the voice command?" + USER_BT_NAME;
 
 
     // Preference

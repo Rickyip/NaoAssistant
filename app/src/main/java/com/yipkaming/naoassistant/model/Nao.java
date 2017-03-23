@@ -92,9 +92,11 @@ public class Nao {
 
     public void initAfterConnection(){
         try {
-            sayConnectionGreeting();
             alAutonomousLife = new ALAutonomousLife(getSession());
             alAutonomousLife.setState("solitary");
+
+
+            sayConnectionGreeting();
 //            if(alAutonomousLife.isStatsEnabled()){
 
             Log.e(TAG, "initAfterConnection: switchFocus"+ alAutonomousLife.getState() );
@@ -338,7 +340,7 @@ public class Nao {
                     break;
 
                 case "Thank you":
-                    alTextToSpeech.say("You are welcome"+ VerbalReminder.GREETING_WITH_NAME);
+                    alTextToSpeech.say("You are welcome"+ VerbalReminder.USER_BT_NAME);
                     break;
 
 
@@ -438,7 +440,7 @@ public class Nao {
 //                    break;
 //
 //                case "thank you":
-//                    alTextToSpeech.say("You are welcome"+ VerbalReminder.GREETING_WITH_NAME);
+//                    alTextToSpeech.say("You are welcome"+ VerbalReminder.USER_BT_NAME);
 //                    break;
 //
 //
@@ -546,7 +548,7 @@ public class Nao {
     }
 
     private void notificationGreeting() throws Exception {
-        say(VerbalReminder.GREETING_WITH_NAME);
+        say(VerbalReminder.USER_BT_NAME);
         List<NotificationMessage> aboutToRead = NotificationMessage.findReadable(Realm.getDefaultInstance(), SelectionHelper.getImportanceThreshold());
         if(aboutToRead.isEmpty()){
             say(VerbalReminder.NO_NOTIFICATION);
